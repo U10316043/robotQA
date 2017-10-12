@@ -9,17 +9,16 @@ var jsonParser = bodyParser.json()
 // create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
-
+var vocabularylist = {}
 router.get('/insertWord', function (req, res, next) {
     console.log('首頁');
-    var vocabularylist = {}
     Vocabulary.find(function(err, theword){
         if(err){
             throw err;
         }else{
             vocabularylist = theword;
         }
-        res.render('insertWord', { vocabularyinform: vocabularylist ,user: req.user, loginStatus: req.isAuthenticated() })
+        res.render('insertWord', { vocabularyinform: vocabularylist ,user: req.user, loginStatus: req.isAuthenticated() })            
     })
 });
 
@@ -46,9 +45,6 @@ router.post('/addword', function (req, res) {
     // if (!req.body) return res.sendStatus(400)
     res.redirect('/insertWord');
 })
-
-
-
 //刪除單字
 router.get('/deleteVocabulary/:vocabulary_id',function (req, res) {
     console.log('刪除單字');
@@ -56,8 +52,7 @@ router.get('/deleteVocabulary/:vocabulary_id',function (req, res) {
     });
     res.redirect('/insertWord');
 })
-
-// //修改單字
+//修改單字
 router.post('/editVocabulary/:vocabulary_id',function (req, res) {
     console.log('修改單字');    
     Vocabulary.findOne({ vocabularyTable:req.body.vocabularyUpdate }, function (err, theWordInDb) {
@@ -80,5 +75,19 @@ router.post('/editVocabulary/:vocabulary_id',function (req, res) {
           res.redirect('/insertWord');
     })
 })
-
+//查詢單字
+router.post('/search', function(req,res) {
+    console.log('查詢單字')
+    var searchWord = req.body.searchWord
+    Vocabulary.find({vocabularyTable:{$regex: searchWord}}, function(err,results) {
+        if(err){
+            throw err;
+        }else if(!results){
+            console.log("The word "+rearchWord+" is not exist.")
+        }else{
+            console.log(results)
+        }  
+    })
+    res.redirect('/insertWord');
+})
 module.exports = router;
