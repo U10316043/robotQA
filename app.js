@@ -16,9 +16,11 @@ var bcrypt = require('bcrypt-nodejs');
 // DB models
 var User = require('./models/user.js');
 var Vocabulary = require('./models/vocabulary.js');
+var Lesson = require('./models/lesson.js');
 //route
 var index = require('./routes/index');
 var vocabularyRoute = require('./routes/vocabulary');
+var lessonRoute = require('./routes/lesson');
 var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -114,6 +116,7 @@ app.use(passport.session());
 app.use(flash());
 app.use('/', index);
 app.use('/', vocabularyRoute);
+app.use('/', lessonRoute);
 // catch 404 and forward to error handler
 // app.use(function(req, res, next) {
 //   var err = new Error('Not Found');

@@ -3,6 +3,7 @@ var router = express.Router();
 var bodyParser = require('body-parser')
 var passport = require('passport');
 var Vocabulary = require('../models/vocabulary.js');
+var Lesson = require('../models/lesson.js');
 
 // create application/json parser
 var jsonParser = bodyParser.json()
@@ -10,7 +11,7 @@ var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 var vocabularylist = {}
-router.get('/insertWord', function (req, res, next) {
+router.get('/lesson/:lessonNum', function (req, res, next) {
     console.log('首頁');
     Vocabulary.find(function(err, theword){
         if(err){
@@ -18,12 +19,11 @@ router.get('/insertWord', function (req, res, next) {
         }else{
             vocabularylist = theword;
         }
-        res.render('insertWord', { vocabularyinform: vocabularylist ,user: req.user, loginStatus: req.isAuthenticated() })            
+        res.render('insertWord', { lessonindex: req.params.lessonNum ,vocabularyinform: vocabularylist ,user: req.user, loginStatus: req.isAuthenticated() })                    
     })
 });
-
 // POST /login gets urlencoded bodies
-router.post('/addword', function (req, res) {
+router.post('/lesson/:lessonNum/addword', function (req, res) {
     console.log('新增單字');
     Vocabulary.findOne({ vocabularyTable:req.body.word }, function (err, theWordInDb) {
         if (err) {
@@ -32,28 +32,32 @@ router.post('/addword', function (req, res) {
         else if (!theWordInDb) {
           var newVocabulary = new Vocabulary();
           newVocabulary.vocabularyTable = req.body.word;
+          newVocabulary.lessonNumTable = req.params.lessonNum;        
+          var path = '/lesson/'+req.params.lessonNum
           newVocabulary.save(function (err) {
           if (err) {  //angular,react,vue
               throw err;
           }
               //return done(null); //Error: Can't set headers after they are sent. sent response end twice
           });
+          res.redirect(path);
         }else{
             console.log('The word already exist!')
         }
     })
     // if (!req.body) return res.sendStatus(400)
-    res.redirect('/insertWord');
+
 })
 //刪除單字
-router.get('/deleteVocabulary/:vocabulary_id',function (req, res) {
+router.get('/lesson/:lessonNum/deleteVocabulary/:vocabulary_id',function (req, res) {
     console.log('刪除單字');
     Vocabulary.findByIdAndRemove(req.params.vocabulary_id, function(err){
     });
-    res.redirect('/insertWord');
+    var path = '/lesson/'+req.params.lessonNum
+    res.redirect(path);
 })
 //修改單字
-router.post('/editVocabulary/:vocabulary_id',function (req, res) {
+router.post('/lesson/:lessonNum/editVocabulary/:vocabulary_id',function (req, res) {
     console.log('修改單字');    
     Vocabulary.findOne({ vocabularyTable:req.body.vocabularyUpdate }, function (err, theWordInDb) {
         if (err) {
@@ -72,7 +76,8 @@ router.post('/editVocabulary/:vocabulary_id',function (req, res) {
           }else{
               console.log('The word already exist!')
           }
-          res.redirect('/insertWord');
+          var path = '/lesson/'+req.params.lessonNum
+          res.redirect(path);
     })
 })
 //查詢單字
@@ -83,11 +88,11 @@ router.post('/search', function(req,res) {
         if(err){
             throw err;
         }else if(!results){
-            console.log("The word "+rearchWord+" is not exist.")
+            console.log("The word "+searchWord+" is not exist.")
         }else{
             console.log(results)
         }  
     })
-    res.redirect('/insertWord');
+    res.redirect('/insertLesson');
 })
 module.exports = router;

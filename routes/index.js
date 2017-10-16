@@ -15,7 +15,7 @@ router.get('/', function (req, res, next) {
 });
 //post登入頁
 router.post('/signin', passport.authenticate('login', {
-  successRedirect: '/insertWord',
+  successRedirect: '/insertLesson',
   failureRedirect: '/',
   failureFlash: true
 }));
@@ -25,7 +25,7 @@ router.get('/getsignup', function (req, res, next) {
 }); 
 //post註冊頁
 router.post('/postsignup',passport.authenticate('ppsignup', {
-  successRedirect:'/insertWord',
+  successRedirect:'/insertLesson',
   failureRedirect: '/getsignup',
   failureFlash: true
 }));
