@@ -13,7 +13,6 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 //get課程列表
 var lessonlist={}
 router.get('/insertLesson', function (req, res, next) {
-    console.log('課程列表');
     Lesson.find(function(err, result){
         if(err){
             throw err;
@@ -26,11 +25,10 @@ router.get('/insertLesson', function (req, res, next) {
 
 // POST新增課程
 router.post('/addlesson', function (req, res) {
-    console.log('新增課程');
     var newLesson = new Lesson();
-    newLesson.lessonNumTable = req.body.lessonNum;
-    newLesson.lessonNameTable = req.body.lessonName;
-    newLesson.lessonInformationTable = req.body.lessonInformation;
+    newLesson.num = req.body.lessonNum;
+    newLesson.name = req.body.lessonName;
+    newLesson.info = req.body.lessonInformation;
     newLesson.save(function (err) {
     if (err) {  //angular,react,vue
         throw err;
@@ -43,7 +41,6 @@ router.post('/addlesson', function (req, res) {
 
 //刪除課程
 router.get('/deletecourse/:lesson_id',function (req, res) {
-    console.log('刪除課程');
     Lesson.findOne({ _id:req.params.lesson_id}, function(err, thelessonid) {
         if(err){
             return done(err)
@@ -51,8 +48,7 @@ router.get('/deletecourse/:lesson_id',function (req, res) {
         else if(!thelessonid){
             console.log("no lesson id error")
         }else{
-            var lessonnum = thelessonid.lessonNumTable;
-            Vocabulary.deleteMany({ lessonNumTable: lessonnum },function(err, obj) {
+            Vocabulary.deleteMany({ lessonId: req.params.lesson_id },function(err, obj) {
                 if (err) throw err;
             })
         }
@@ -62,17 +58,16 @@ router.get('/deletecourse/:lesson_id',function (req, res) {
     res.redirect('/insertLesson');
 })
 //修改課程資訊
-router.post('/editcourse/:lesson_id',function (req, res) {
-    console.log('修改課程資訊');    
+router.post('/editcourse/:lesson_id',function (req, res) { 
     Lesson.findById(req.params.lesson_id, function(err, newDb){
-        newDb.lessonNumTable = req.body.lessonNum;
-        newDb.lessonNameTable = req.body.lessonName;
-        newDb.lessonInformationTable = req.body.lessonInformation;
+        newDb.num = req.body.lessonNum;
+        newDb.name = req.body.lessonName;
+        newDb.info = req.body.lessonInformation;
         newDb.save(function (err, newDb) {
             if (err) {  
                 throw err;
             } 
-            console.log('update the word in database');
+            ('update the word in database');
         });
     });
     res.redirect('/insertLesson');

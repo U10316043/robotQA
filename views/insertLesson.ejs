@@ -2,26 +2,15 @@
 <html>
     <head>
         <meta charset = "utf-8">
-        <!--JQuery-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        
-        <link rel='stylesheet' href='css/insertWord.css' />
         <title>insertWord</title>
     </head>
     <body>
         <nav class = "navbar navbar-default">
             <div class = "container-fluid">
                 <div class="navbar-header">
-                    <form id="search" role="search" action="/search" method="post">
-                        <div class="input-group">
-                            <input type="text" class="form-control" name="searchWord" placeholder="Search..." required="true">
-                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                        </div>
-                    </form>
                     <% if (loginStatus){ %>
                         <a class = "navbar-brand" href="./insertWord"><%= user.nickname %>  Home</a>
                         <a href="/signout" class="btn btn-default navbar-btn navbar-right">登出</a>
@@ -88,14 +77,12 @@
                             <tr href="#">
                                 <th scope="row"><%=i +1%></th> 
                                 <td>
-                                    <%= lessoninform[i].lessonNumTable%>
-                                    <!-- update/delete vocabulary --> 
+                                    <%= lessoninform[i].num%>
                                 </td> 
                                 <td>
                                     <div class="input-group">
-                                            <%= lessoninform[i].lessonNameTable%>
+                                            <%= lessoninform[i].name%>
                                             <span class="input-group-btn">
-                                                <!-- Single button -->
                                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <span class="glyphicon glyphicon-cog"></span>
                                                     </button>
@@ -121,15 +108,15 @@
                                                     <form>
                                                     <div class="form-group">
                                                         <label for="lesson-num" class="form-control-label">課程單元:</label>
-                                                        <input type="text" class="form-control" id="lessonNum" name="lessonNum" value=<%= lessoninform[i].lessonNumTable%> required="true">
+                                                        <input type="text" class="form-control" id="lessonNum" name="lessonNum" value=<%= lessoninform[i].num%> required="true">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="lesson-name" class="form-control-label">課程名稱:</label>
-                                                        <input type="text" class="form-control" id="lessonName" name="lessonName" value=<%= lessoninform[i].lessonNameTable%> >
+                                                        <input type="text" class="form-control" id="lessonName" name="lessonName" value=<%= lessoninform[i].name %> >
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="lesson-information" class="form-control-label">課程資訊:</label>
-                                                        <textarea class="form-control" id="lessonInformation" name="lessonInformation"><%= lessoninform[i].lessonInformationTable%></textarea>
+                                                        <textarea class="form-control" id="lessonInformation" name="lessonInformation"><%= lessoninform[i].info%></textarea>
                                                     </div>
                                                     </form>
                                                 </div>
@@ -144,7 +131,7 @@
 
                                 </td>    
                                 <td>
-                                    <a href="./lesson/<%= lessoninform[i].lessonNumTable%>" class="list-group-item list-group-item-action">進入課程</a>
+                                    <a href="./lesson/<%= lessoninform[i]._id%>" class="list-group-item list-group-item-action">進入課程</a>
                                 </td>            
                             </tr>
                         <% } %>

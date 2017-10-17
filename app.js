@@ -61,7 +61,6 @@ passport.use('ppsignup', new LocalStrategy(
   passReqToCallback: true,
   }, 
   function (req, username, password, done) {
-    console.log("ppsignup pre");
     var findOrCreateUser = function () {
       User.findOne({ username: username }, function (err, user) {
         if (err) {
@@ -73,7 +72,6 @@ passport.use('ppsignup', new LocalStrategy(
           
         }
         if (user) {
-          console.log('User already exists hahahahahha!!!!')
           return done(null, false, req.flash('info', 'User already exists'));
         } else {
           var newUser = new User();
