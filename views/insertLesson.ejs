@@ -24,11 +24,11 @@
                     </form>
                     <% if (loginStatus){ %>
                         <a class = "navbar-brand" href="./insertWord"><%= user.nickname %>  Home</a>
-                        <a href="/signout" class="btn btn-default navbar-btn pull-right">登出</a>
+                        <a href="/signout" class="btn btn-default navbar-btn navbar-right">登出</a>
                     <% }else{ %>
                         <a class = "navbar-brand">Home</a>
-                        <a href="/" class="btn btn-default navbar-btn pull-right">登入</a>
-                        <a href="/getsignup" class="btn btn-default navbar-btn pull-right">註冊</a>
+                        <a href="/" class="btn btn-default navbar-btn navbar-right">登入</a>
+                        <a href="/getsignup" class="btn btn-default navbar-btn navbar-right">註冊</a>
                     <% } %>
                 </div>
             </div>
@@ -36,7 +36,7 @@
         <section id="vocaulary list">
             <div class="container">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#lessonModal" >新增課程</button>
-                
+                <!-- 新增課程modal-->
                 <div class="modal fade" id="lessonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <form class="form-horizontal" role="form" action="/addlesson" method="post">
                         <div class="modal-dialog" role="document">
@@ -51,11 +51,11 @@
                                 <form>
                                 <div class="form-group">
                                     <label for="lesson-num" class="form-control-label">課程單元:</label>
-                                    <input type="text" class="form-control" id="lessonNum" name="lessonNum">
+                                    <input type="text" class="form-control" id="lessonNum" name="lessonNum" required="true">
                                 </div>
                                 <div class="form-group">
                                     <label for="lesson-name" class="form-control-label">課程名稱:</label>
-                                    <input type="text" class="form-control" id="lessonName" name="lessonName">
+                                    <input type="text" class="form-control" id="lessonName" name="lessonName" >
                                 </div>
                                 <div class="form-group">
                                     <label for="lesson-information" class="form-control-label">課程資訊:</label>
@@ -92,12 +92,59 @@
                                     <!-- update/delete vocabulary --> 
                                 </td> 
                                 <td>
-                                    <%= lessoninform[i].lessonNameTable%>
-                                    <!-- update/delete vocabulary --> 
+                                    <div class="input-group">
+                                            <%= lessoninform[i].lessonNameTable%>
+                                            <span class="input-group-btn">
+                                                <!-- Single button -->
+                                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <span class="glyphicon glyphicon-cog"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                    <li><a type="button" data-toggle="modal" data-target="#editlesson<%= i %>" >編輯課程資訊</a></li>
+                                                    <li><a href="/deletecourse/<%= lessoninform[i]._id%>">刪除課程</a></li>
+                                                    </ul>
+                                            </span>
+                                    </div>
+                                    
+                                    <!-- edit course information modal -->
+                                    <div class="modal fade" id="editlesson<%= i %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <form class="form-horizontal" role="form" action="/editcourse/<%= lessoninform[i]._id%>" method="post">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="lessonModalLabel">新增課程</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form>
+                                                    <div class="form-group">
+                                                        <label for="lesson-num" class="form-control-label">課程單元:</label>
+                                                        <input type="text" class="form-control" id="lessonNum" name="lessonNum" value=<%= lessoninform[i].lessonNumTable%> required="true">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="lesson-name" class="form-control-label">課程名稱:</label>
+                                                        <input type="text" class="form-control" id="lessonName" name="lessonName" value=<%= lessoninform[i].lessonNameTable%> >
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="lesson-information" class="form-control-label">課程資訊:</label>
+                                                        <textarea class="form-control" id="lessonInformation" name="lessonInformation"><%= lessoninform[i].lessonInformationTable%></textarea>
+                                                    </div>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                                                    <button type="submit" class="btn btn-primary">送出</button>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
                                 </td>    
                                 <td>
                                     <a href="./lesson/<%= lessoninform[i].lessonNumTable%>" class="list-group-item list-group-item-action">進入課程</a>
-                                    <!-- update/delete vocabulary --> 
                                 </td>            
                             </tr>
                         <% } %>

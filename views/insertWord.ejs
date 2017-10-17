@@ -24,18 +24,19 @@
                     </form>
                     <% if (loginStatus){ %>
                         <a class = "navbar-brand" href="./insertWord"><%= user.nickname %>  Home</a>
-                        <a href="/signout" class="btn btn-default navbar-btn pull-right">登出</a>
+                        <a href="/signout" class="btn btn-default navbar-btn navbar-right">登出</a>
                     <% }else{ %>
                         <a class = "navbar-brand">Home</a>
-                        <a href="/" class="btn btn-default navbar-btn pull-right">登入</a>
-                        <a href="/getsignup" class="btn btn-default navbar-btn pull-right">註冊</a>
+                        <a href="/" class="btn btn-default navbar-btn navbar-right">登入</a>
+                        <a href="/getsignup" class="btn btn-default navbar-btn navbar-right">註冊</a>
                     <% } %>
                 </div>
             </div>
         </nav>
         <section id="vocaulary list">
             <div class="container">
-                    <a href="/insertLesson" type="button" class="btn btn-primary" ><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> 回到課程</a>
+                    <a href="/insertLesson" type="button" class="btn btn-primary" ><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> 回到課程列表</a>
+                    課程單元：<%= lessonindex%>
                 <% if (loginStatus){ %>
                     <h3>新增單字</h3>
                     <form class="form-horizontal" role="form" action="/lesson/<%= lessonindex %>/addword" method="post">

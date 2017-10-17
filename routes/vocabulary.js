@@ -10,19 +10,30 @@ var jsonParser = bodyParser.json()
 // create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
+//get單字列表
 var vocabularylist = {}
+var lessonlist = {}
 router.get('/lesson/:lessonNum', function (req, res, next) {
-    console.log('首頁');
-    Vocabulary.find(function(err, theword){
+    console.log('單字列表');
+    Vocabulary.find(function(err, vocabularydb){
         if(err){
             throw err;
         }else{
-            vocabularylist = theword;
+            vocabularylist = vocabularydb;
+            Lesson.find(function(err, lessondb){
+                if(err){
+                    throw err;
+                }else{
+                    lessonlist = lessondb;
+                    
+                }
+            })
         }
-        res.render('insertWord', { lessonindex: req.params.lessonNum ,vocabularyinform: vocabularylist ,user: req.user, loginStatus: req.isAuthenticated() })                    
+        res.render('insertWord', { lessonindex: req.params.lessonNum ,lessoninform: lessonlist ,vocabularyinform: vocabularylist ,user: req.user, loginStatus: req.isAuthenticated() })                    
     })
+    
 });
-// POST /login gets urlencoded bodies
+// POST /新增單字
 router.post('/lesson/:lessonNum/addword', function (req, res) {
     console.log('新增單字');
     Vocabulary.findOne({ vocabularyTable:req.body.word }, function (err, theWordInDb) {
