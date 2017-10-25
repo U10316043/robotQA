@@ -52,7 +52,9 @@ router.post('/editcourse/:lesson_id', function (req, res) {
       'info': req.body.lessonInformation
     }},
     function (err, result) {
-      console.log(err)
+      if (err) {
+        throw err
+      }
     }
   )
   res.redirect('/insertLesson')

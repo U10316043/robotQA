@@ -18,6 +18,7 @@ var User = require('./models/user.js')
 var index = require('./routes/index')
 var vocabularyRoute = require('./routes/vocabulary')
 var lessonRoute = require('./routes/lesson')
+var examRoute = require('./routes/exam')
 var app = express()
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
@@ -106,6 +107,8 @@ app.use(flash())
 app.use('/', index)
 app.use('/', vocabularyRoute)
 app.use('/', lessonRoute)
+app.use('/', examRoute)
+
 // catch 404 and forward to error handler
 // app.use(function(req, res, next) {
 //   var err = new Error('Not Found');

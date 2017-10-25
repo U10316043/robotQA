@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "admin-lte": "^2.4.2",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "~1.17.1",
     "bootstrap": "^4.0.0-alpha.6",

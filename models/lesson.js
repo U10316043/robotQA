@@ -6,7 +6,9 @@ var lessonSchema = new Schema({
   info: String,
   vocabulary: [{
     word: String
-  }]
+  }],
+  totalExam: Number,
+  totalCorrect: Number
 })
 
 module.exports = mongoose.model('Lesson', lessonSchema)

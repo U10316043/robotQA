@@ -25,7 +25,9 @@ router.post('/lesson/:lessonId/addword', function (req, res) {
         {_id: req.params.lessonId},
         {$push: {vocabulary: {_id: req.params.lessonId, word: req.body.word}}},
         function (err, result) {
-          console.log(err)
+          if (err) {
+            throw err
+          }
         }
       )
       var path = '/lesson/' + req.params.lessonId
@@ -42,7 +44,9 @@ router.get('/lesson/:lessonId/deleteVocabulary/:word', function (req, res) {
     {'_id': req.params.lessonId},
     {$pull: {vocabulary: {word: req.params.word}}},
     function (err, result) {
-      console.log(err)
+      if (err) {
+        throw err
+      }
     }
   )
   var path = '/lesson/' + req.params.lessonId
@@ -60,7 +64,9 @@ router.post('/lesson/:lessonId/editVocabulary/:word', function (req, res) {
         {'_id': req.params.lessonId, 'vocabulary.word': req.params.word},
         {$set: {'vocabulary.$.word': req.body.vocabularyUpdate}},
         function (err, result) {
-          console.log(err)
+          if (err) {
+            throw err
+          }
         }
       )
     } else {
