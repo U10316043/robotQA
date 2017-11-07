@@ -23,7 +23,7 @@ router.post('/lesson/:lessonId/addword', function (req, res) {
     } else if (!theWordInDb) {
       Lesson.findOneAndUpdate(
         {_id: req.params.lessonId},
-        {$push: {vocabulary: {_id: req.params.lessonId, word: req.body.word}}},
+        {$push: {vocabulary: {word: req.body.word}}},
         function (err, result) {
           if (err) {
             throw err
@@ -61,7 +61,7 @@ router.post('/lesson/:lessonId/editVocabulary/:word', function (req, res) {
     } else if (!theWordInDb) {
       console.log('update one')
       Lesson.findOneAndUpdate(
-        {'_id': req.params.lessonId, 'vocabulary.word': req.params.word},
+        {'vocabulary.word': req.params.word},
         {$set: {'vocabulary.$.word': req.body.vocabularyUpdate}},
         function (err, result) {
           if (err) {

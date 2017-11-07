@@ -49,17 +49,30 @@
             <div class="container">
                 <a href="../<%= lessonindex %>" type="button" class="btn btn-primary" ><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> 回到單字列表</a>
                 課程單元：<%= lessoninform.num%> / 課程名稱：<%= lessoninform.name%>
+                <div class="box-tools pull-right">
+                    <a href="/performance" type="button" class="btn btn-primary" >查看答題狀況<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></a>
+                </div>
                 <div class="well">課程介紹：<%= lessoninform.info%></div>
             </div>
         </section>
         <section id="exam">
             <div class="container">
-              <h1 class="text-center">
-								<p><%= randomWord %></p>
-								<input type="text" class="form-control input-lg" placeholder="Text input">
-								<button type="button" class="btn btn-primary btn-lg">Submit</button>
-							</h1>
-              
+							<div class="panel-group">
+								<div class="panel panel-primary">
+									<div class="panel-heading" data-toggle="collapse" href="#collapse1">
+										<h4 class="panel-title">
+											<a >查看題目</a>
+										</h4>
+									</div>
+									<div id="collapse1" class="panel-collapse collapse">
+										<ul class="list-group">
+											<% for(var i=0; i<question.length; i++) {%>
+												<li class="list-group-item"><%= i+1 %>. <%= question[i] %></li>
+											<% } %>
+										</ul>
+									</div>
+								</div>
+							</div>         
             </div>
         </section>
 

@@ -50,9 +50,11 @@
             <div class="container">
                 <a href="/insertLesson" type="button" class="btn btn-primary" ><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> 回到課程列表</a>
                 課程單元：<%= lessoninform.num%> / 課程名稱：<%= lessoninform.name%>
+                <% if (loginStatus){ %>
                 <div class="box-tools pull-right">
                     <a href="./<%= lessonindex %>/exam" type="button" class="btn btn-primary" >進入測驗<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></a>
                 </div>
+                <% } %>
                 <div class="well">課程介紹：<%= lessoninform.info%></div>
             </div>
         </section>
@@ -83,6 +85,9 @@
                                 <tr>
                                 <th>#</th>
                                 <th>vocabulary</th>
+                                <th>Progress</th>
+                                <th style="width: 40px">Label</th>
+                                <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -93,6 +98,15 @@
                                         <td>
                                             <div id="mylist"><%= lessoninform.vocabulary[i].word%></div>
                                             <!-- update/delete vocabulary -->
+                                            
+                                        </td>    
+                                        <td>
+                                            <div class="progress progress-xs progress-striped active">
+                                            <div class="progress-bar progress-bar-primary" style="width: 100%"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-light-blue">100%</span></td>   
+                                        <td>
                                             <% if (loginStatus){ %>
                                                 
                                             <a href="/lesson/<%= lessonindex %>/deleteVocabulary/<%= lessoninform.vocabulary[i].word %>" class="btn btn-default pull-right">刪除</a>
@@ -120,7 +134,7 @@
                                                     </div>
                                                 </form>
                                             </div>
-                                        </td>                 
+                                        </td>          
                                     </tr>
                                 <% } %>
                             </tbody>
