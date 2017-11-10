@@ -1,6 +1,7 @@
 var express = require('express')
 var router = express.Router()
 var Lesson = require('../models/lesson.js')
+var Record = require('../models/record.js')
 
 // get課程列表
 var lessonlist = {}

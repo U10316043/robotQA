@@ -1,6 +1,7 @@
 var express = require('express')
 var router = express.Router()
 var Lesson = require('../models/lesson.js')
+var Record = require('../models/record.js')
 
 // get單字列表
 var lessonlist = {}
@@ -10,7 +11,23 @@ router.get('/lesson/:lessonId', function (req, res, next) {
       throw err
     } else {
       lessonlist = lessondb
-      res.render('insertWord', { lessonindex: req.params.lessonId, lessoninform: lessonlist, user: req.user, loginStatus: req.isAuthenticated() })
+      Record.findOne({'username': req.user.username, 'lesson.lessonId': req.params.lessonId}, {'lesson.$': 1}, function (err, recordResult) {
+        if (err) {
+          throw err
+        } else {
+          var wordFamiliarity = []
+          if (!recordResult) {
+            for (var i = 0; i < lessondb.vocabulary.length; i++) {
+              wordFamiliarity[i] = 0
+            }
+          } else {
+            for (i = 0; i < recordResult.lesson[0].wordFamiliarity.length; i++) {
+              wordFamiliarity[i] = parseInt(recordResult.lesson[0].wordFamiliarity[i] * 100 / (4 * recordResult.lesson[0].testTimes))
+            }
+          }
+          res.render('insertWord', { wordFamiliarity: wordFamiliarity, lessonindex: req.params.lessonId, lessoninform: lessonlist, user: req.user, loginStatus: req.isAuthenticated() })
+        }
+      })
     }
   })
 })

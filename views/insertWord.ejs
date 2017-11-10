@@ -85,8 +85,8 @@
                                 <tr>
                                 <th>#</th>
                                 <th>vocabulary</th>
-                                <th>Progress</th>
-                                <th style="width: 40px">Label</th>
+                                <th>familiarity</th>
+                                <th style="width: 40px"></th>
                                 <th></th>
                                 </tr>
                             </thead>
@@ -102,10 +102,10 @@
                                         </td>    
                                         <td>
                                             <div class="progress progress-xs progress-striped active">
-                                            <div class="progress-bar progress-bar-primary" style="width: 100%"></div>
+                                            <div class="progress-bar progress-bar-primary" style="width: <%= wordFamiliarity[i]%>%"></div>
                                             </div>
                                         </td>
-                                        <td><span class="badge bg-light-blue">100%</span></td>   
+                                        <td><span class="badge bg-light-blue"><%= wordFamiliarity[i]%>%</span></td>   
                                         <td>
                                             <% if (loginStatus){ %>
                                                 
