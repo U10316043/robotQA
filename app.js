@@ -3,6 +3,7 @@ var path = require('path')
 var logger = require('morgan')
 var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
+
 // mongoose connect
 var mongoose = require('mongoose')
 mongoose.connect('mongodb://localhost:27017/robotQA')
@@ -14,6 +15,7 @@ var flash = require('connect-flash')
 var bcrypt = require('bcrypt-nodejs')
 // DB models
 var User = require('./models/user.js')
+var Record = require('./models/record.js')
 // route
 var index = require('./routes/index')
 var vocabularyRoute = require('./routes/vocabulary')
@@ -74,11 +76,16 @@ passport.use('ppsignup', new LocalStrategy(
           var newUser = new User()
           newUser.username = username
           newUser.nickname = req.body.nickname
-          newUser.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10), null);
+          newUser.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10), null)
           newUser.save(function (err, user) {
             if (err) {
               throw err
             }
+            Record.insertMany({username: username}, function (err) {
+              if (err) {
+                throw err
+              }
+            })
             return done(null, user, req.flash('info', '已經進入註冊函數'))
           })
         }
@@ -108,7 +115,7 @@ app.use(flash())
 app.use('/', index)
 app.use('/', vocabularyRoute)
 app.use('/', lessonRoute)
-app.use('/', examRoute)
+app.use('/', examRoute.router)
 app.use('/', performance)
 
 // catch 404 and forward to error handler

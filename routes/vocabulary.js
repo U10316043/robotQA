@@ -17,10 +17,11 @@ router.get('/lesson/:lessonId', function (req, res, next) {
 
 // POST /新增單字
 router.post('/lesson/:lessonId/addword', function (req, res) {
-  Lesson.findOne({ vocabulary: {word: req.body.word} }, function (err, theWordInDb) {
+  Lesson.findOne({ 'vocabulary.word': req.body.word }, function (err, theWordInDb) {
     if (err) {
       throw err
     } else if (!theWordInDb) {
+      console.log('qwqwqwqwqwqwqw')
       Lesson.findOneAndUpdate(
         {_id: req.params.lessonId},
         {$push: {vocabulary: {word: req.body.word}}},
@@ -34,6 +35,8 @@ router.post('/lesson/:lessonId/addword', function (req, res) {
       res.redirect(path)
     } else {
       console.log('The word already exist!')
+      path = '/lesson/' + req.params.lessonId
+      res.redirect(path)
     }
   })
 })
