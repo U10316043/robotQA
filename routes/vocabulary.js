@@ -8,11 +8,11 @@ var lessonList = {}
 var wordTotalScore = []
 router.get('/lesson/:lessonId', function (req, res, next) {
   if (req.isAuthenticated() === true) {
-    Lesson.findOne({_id: req.params.lessonId}, function (err, lessondb) {
+    Lesson.findOne({_id: req.params.lessonId}, function (err, lesson) {
       if (err) {
         throw err
       } else {
-        lessonList = lessondb
+        lessonList = lesson
         Record.findOne({'username': req.user.username, 'lesson.lessonId': req.params.lessonId}, {'lesson.$': 1}, function (err, recordResult) {
           if (err) {
             throw err
@@ -41,7 +41,6 @@ router.post('/lesson/:lessonId/addword', function (req, res) {
     if (err) {
       throw err
     } else if (!theWordInDb) {
-      console.log('qwqwqwqwqwqwqw')
       Lesson.findOneAndUpdate(
         {_id: req.params.lessonId},
         {$push: {vocabulary: {word: req.body.word}}},
