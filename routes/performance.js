@@ -2,22 +2,22 @@ var express = require('express')
 var router = express.Router()
 var Lesson = require('../models/lesson.js')
 var examResult = require('./exam.js')
-var wordlist = require('./exam.js').wordlist
+var wordList = require('./exam.js').wordList
 
-var lessonlist = {}
+var lessonList = {}
 // get performance 測驗成績
 router.get('/performance/:lessonId', function (req, res, next) {
   if (req.isAuthenticated() === true) {
-    Lesson.findOne({_id: req.params.lessonId}, function (err, lessondb) {
+    Lesson.findOne({_id: req.params.lessonId}, function (err, lesson) {
       if (err) {
         throw err
       } else {
-        lessonlist = lessondb
-        console.log(lessonlist)
+        lessonList = lesson
+        console.log(lessonList)
         console.log(examResult)
-        console.log('wordlist: ' + wordlist.wordlist)
+        console.log('wordList: ' + wordList.wordList)
         console.log('testResult: ' + examResult.testResult)
-        console.log('numlist: ' + examResult.numlist)
+        console.log('numList: ' + examResult.numList)
         console.log('everyScoreNum: ' + examResult.everyScoreNum)
         res.render('performance')
       }

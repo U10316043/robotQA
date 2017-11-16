@@ -165,6 +165,5 @@ module.exports = {
   router,
   numlist,
   wordlist,
-  testResult,
-  everyScoreNum
+  testResult
 }

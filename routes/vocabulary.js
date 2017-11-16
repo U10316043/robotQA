@@ -4,7 +4,7 @@ var Lesson = require('../models/lesson.js')
 var Record = require('../models/record.js')
 
 // get單字列表
-var lessonlist = {}
+var lessonList = {}
 var wordTotalScore = []
 router.get('/lesson/:lessonId', function (req, res, next) {
   if (req.isAuthenticated() === true) {
@@ -12,7 +12,7 @@ router.get('/lesson/:lessonId', function (req, res, next) {
       if (err) {
         throw err
       } else {
-        lessonlist = lessondb
+        lessonList = lessondb
         Record.findOne({'username': req.user.username, 'lesson.lessonId': req.params.lessonId}, {'lesson.$': 1}, function (err, recordResult) {
           if (err) {
             throw err
@@ -26,7 +26,7 @@ router.get('/lesson/:lessonId', function (req, res, next) {
               wordTotalScore[i] = parseInt(recordResult.lesson[0].wordTotalScore[i] * 100 / (4 * recordResult.lesson[0].testTimes))
             }
           }
-          res.render('insertWord', { wordTotalScore: wordTotalScore, lessonindex: req.params.lessonId, lessoninform: lessonlist, user: req.user, loginStatus: req.isAuthenticated() })          
+          res.render('insertWord', { wordTotalScore: wordTotalScore, lessonindex: req.params.lessonId, lessoninform: lessonList, user: req.user, loginStatus: req.isAuthenticated() })          
         })
       }
     })
