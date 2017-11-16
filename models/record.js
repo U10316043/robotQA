@@ -5,9 +5,9 @@ var recordSchema = new Schema({
   username: String,
   lesson: [{
     lessonId: String,
-    lessonFamilarity: Number, // 整個課程熟悉度
+    lessonTotalScore: Number, // 整個課程的綜合成績
     testTimes: Number,
-    wordFamiliarity: [], // 每個單字的熟悉程度
+    wordTotalScore: [], // 每次測驗的單字得分加總
     testRecord: [] // 每次考試的分數
   }]
 })

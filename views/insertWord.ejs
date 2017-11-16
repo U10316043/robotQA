@@ -21,11 +21,7 @@
             <nav class="navbar navbar-static-top">
                 <div class="container-fluid">
                     <div class="navbar-header">
-                    <% if (loginStatus){ %>
                         <a class = "navbar-brand" href="/insertLesson"><b><%= user.nickname %>  Home</b></a>
-                    <% }else{ %>
-                        <a class = "navbar-brand"><b>Home</b></a>
-                    <% } %>
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
                         <span class="glyphicon glyphicon-menu-hamburger"></span>
                     </button>
@@ -34,12 +30,8 @@
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="navbar-collapse">
                         <ul class="nav navbar-nav navbar-right">
-                                <% if (loginStatus){ %>
-                                    <li><a href="/signout" class="btn btn-primary">登出</a></li>
-                                <% }else{ %>
-                                    <li><a href="/" class="btn btn-primary">登入</a></li>
-                                    <li><a href="/getsignup" class="btn btn-primary">註冊</a></li>
-                                <% } %>
+                            <li><a href="/allRecord" class="btn btn-primary">個人資料</a></li>
+                            <li><a href="/signout" class="btn btn-primary">登出</a></li>
                         </ul>       
                     </div>     
                 </div>
@@ -50,17 +42,16 @@
             <div class="container">
                 <a href="/insertLesson" type="button" class="btn btn-primary" ><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> 回到課程列表</a>
                 課程單元：<%= lessoninform.num%> / 課程名稱：<%= lessoninform.name%>
-                <% if (loginStatus){ %>
                 <div class="box-tools pull-right">
-                    <a href="./<%= lessonindex %>/exam" type="button" class="btn btn-primary" >進入測驗<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></a>
+                    <form class="form-horizontal" role="form" action="/selectlesson/<%= lessonindex %>" method="post">                            
+                        <button type="submit" class="btn btn-primary" >選定測驗課程<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></button>
+                    </form>
                 </div>
-                <% } %>
                 <div class="well">課程介紹：<%= lessoninform.info%></div>
             </div>
         </section>
         <section id="vocaulary list">
             <div class="container">
-                <% if (loginStatus){ %>
                     <h3>新增單字</h3>
                     <form class="form-horizontal" role="form" action="/lesson/<%= lessonindex %>/addword" method="post">
                         <div class="input-group">
@@ -70,7 +61,6 @@
                             </span>
                         </div>
                     </form>
-                <% } %>
                 <br>
                 <div class="box box-solid box-primary">
                     <div class="box-header with-border">
@@ -85,7 +75,7 @@
                                 <tr>
                                 <th>#</th>
                                 <th>vocabulary</th>
-                                <th>familiarity</th>
+                                <th>totalScore</th>
                                 <th style="width: 40px"></th>
                                 <th></th>
                                 </tr>
@@ -102,14 +92,14 @@
                                         </td>    
                                         <td>
                                             <div class="progress progress-xs progress-striped active">
-                                            <div class="progress-bar progress-bar-primary" style="width: <%= wordFamiliarity[i]%>%"></div>
+                                            <div class="progress-bar progress-bar-primary" style="width: <%= wordTotalScore[i]%>%"></div>
                                             </div>
                                         </td>
-                                        <td><span class="badge bg-light-blue"><%= wordFamiliarity[i]%>%</span></td>   
+                                        <td><span class="badge bg-light-blue"><%= wordTotalScore[i]%>%</span></td>   
                                         <td>
                                             <% if (loginStatus){ %>
                                                 
-                                            <a href="/lesson/<%= lessonindex %>/deleteVocabulary/<%= lessoninform.vocabulary[i].word %>" class="btn btn-default pull-right">刪除</a>
+                                            <a href="/lesson/<%= lessonindex %>/deleteVocabulary/<%= lessoninform.vocabulary[i].word %>/<%= i%>" class="btn btn-default pull-right">刪除</a>
                                             <button class = "btn btn-default pull-right " data-toggle="modal" data-target="#editWord<%= i %>">
                                                 <span class="glyphicon glyphicon-pencil " aria-hidden ="true"></span>編輯
                                             </button>

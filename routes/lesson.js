@@ -6,14 +6,18 @@ var Record = require('../models/record.js')
 // get課程列表
 var lessonlist = {}
 router.get('/insertLesson', function (req, res, next) {
-  Lesson.find(function (err, result) {
-    if (err) {
-      throw err
-    } else {
-      lessonlist = result
-    }
-    res.render('insertLesson', { lessoninform: lessonlist, user: req.user, loginStatus: req.isAuthenticated() })
-  })
+  if (req.isAuthenticated() === true) {
+    Lesson.find(function (err, result) {
+      if (err) {
+        throw err
+      } else {
+        lessonlist = result
+      }
+      res.render('insertLesson', { lessoninform: lessonlist, user: req.user, loginStatus: req.isAuthenticated() })
+    })
+  } else {
+    res.render('error')
+  }
 })
 
 // POST新增課程
@@ -39,6 +43,16 @@ router.get('/deletecourse/:lesson_id', function (req, res) {
       throw err
     }
   })
+  Record.update(
+    { },
+    { $pull: { lesson: {lessonId: req.params.lesson_id} } },
+    { multi: true },
+    function (err, result) {
+      if (err) {
+        throw err
+      }
+    }
+  )
   res.redirect('/insertLesson')
 })
 // 修改課程資訊
