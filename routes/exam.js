@@ -10,6 +10,8 @@ var answerWord = []// answer
 // 取得考試的lessonId和測驗對象username
 var lessonList = {}
 var lessonId
+var lessonNum
+var lessonName
 var username
 router.post('/selectlesson/:lessonId', function (req, res, next) {
   lessonId = req.params.lessonId
@@ -41,6 +43,8 @@ router.get('/1/vocabulary', function (req, res, next) {
     } else {
       wordList = []
       lessonList = lesson
+      lessonNum = lesson.num
+      lessonName = lesson.name
       var index = lessonList.vocabulary.length
       for (var i = 0; i < index; i++) {
         numList[i] = i
@@ -95,6 +99,9 @@ router.post('/1/perlessonScore', function (req, res) {
         {$push: {
           lesson: {
             lessonId: lessonId,
+            lessonNum: lessonNum,
+            lessonName: lessonName,
+            isActive: true,
             wordTotalScore: testResultOrder,
             testTimes: 1,
             testRecord: testRecord,
@@ -109,6 +116,7 @@ router.post('/1/perlessonScore', function (req, res) {
         }
       )
     } else {
+      // 已有一次記錄增加記錄
       var testTimes = lessonExist.lesson[0].testTimes + 1
       for (var i = 0; i < numList.length; i++) {
         lessonExist.lesson[0].wordTotalScore[i] = parseInt(lessonExist.lesson[0].wordTotalScore[i]) + parseInt(testResultOrder[i])

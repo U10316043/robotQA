@@ -8,32 +8,37 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="css/sign.css">
         <title>signup</title>
     </head>
     <body>
         <div class="container">
-            <div class = "row">
-                <div class="col-md-4 offset-md-4">
-                    <h1 class="text-center login-title">Sign up</h1>
-                    <div class="card">
-                        <div class="card-block">
-                            <form action="/postsignup" method="post">
-                                <input type="text" name="username" class="form-control" placeholder="帳號" require="true" autofocus>
-                                <input type="password" name="password" class="form-control" placeholder="密碼" require="true" autofocus>
-                                <input type="text" name="nickname" class="form-control" placeholder="姓名" require="true" autofocus>
-                                <button class="btn btn-primary btn-block" type="submit">signup</button>
-                                <span class="clearfix"></span>
-                                <% if ( message.length) { %>
-                                    <div id="message">
-                                        <div class="alert alert-danger text-center"> <%= message %></div>
-                                    </div>
-                                <% } %>
-                            </form>
+            <div class="card">
+                <h1 class="text-center login-title">Sign up</h1>
+                <div class="card-block">
+                    <form action="/postsignup" method="post">
+                        <div class="signArea">
+                            <input type="text" name="username" class="form-control" placeholder="帳號" require="true" autofocus>                                        
                         </div>
-                    </div>  
-                    <a type="button" href="./">Already have an account?Sign in.</a>          
+                        <div class="signArea">
+                            <input type="password" name="password" class="form-control" placeholder="密碼" require="true" autofocus>
+                        </div>
+                        <div class="signArea">
+                            <input type="text" name="nickname" class="form-control" placeholder="姓名" require="true" autofocus>
+                        </div>
+                        <div class="signArea">
+                            <button class="btn btn-primary btn-block" type="submit">signup</button>
+                        </div>
+                        <span class="clearfix"></span>
+                        <% if ( message.length) { %>
+                            <div id="message">
+                                <div class="alert alert-danger text-center"> <%= message %></div>
+                            </div>
+                        <% } %>
+                    </form>
                 </div>
-            </div>
+                <a type="button" href="./">Already have an account?Sign in.</a>
+            </div>                   
         </div>
     </body>
 </html>

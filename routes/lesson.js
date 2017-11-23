@@ -4,16 +4,22 @@ var Lesson = require('../models/lesson.js')
 var Record = require('../models/record.js')
 
 // get課程列表
-var lessonlist = {}
+var lessonList = {}
 router.get('/insertLesson', function (req, res, next) {
   if (req.isAuthenticated() === true) {
-    Lesson.find(function (err, result) {
+    Lesson.find(function (err, lesson) {
       if (err) {
         throw err
       } else {
-        lessonlist = result
+        lessonList = lesson
       }
-      res.render('insertLesson', { lessoninform: lessonlist, user: req.user, loginStatus: req.isAuthenticated() })
+      res.render('insertLesson',
+        {
+          lessoninform: lessonList,
+          user: req.user,
+          loginStatus: req.isAuthenticated()
+        }
+      )
     })
   } else {
     res.render('error')
@@ -30,9 +36,7 @@ router.post('/addlesson', function (req, res) {
     if (err) {
       throw err
     }
-      // return done(null); //Error: Can't set headers after they are sent. sent response end twice
   })
-  // if (!req.body) return res.sendStatus(400)
   res.redirect('/insertLesson')
 })
 
@@ -44,10 +48,11 @@ router.get('/deletecourse/:lesson_id', function (req, res) {
     }
   })
   Record.update(
-    { },
-    { $pull: { lesson: {lessonId: req.params.lesson_id} } },
-    { multi: true },
-    function (err, result) {
+    { 'lesson.lessonId': req.params.lesson_id },
+    {$set: {
+      'lesson.$.isActive': false
+    }},
+    function (err) {
       if (err) {
         throw err
       }

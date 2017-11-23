@@ -49,22 +49,22 @@
         </section>
         <section id="exam">
             <div class="container">
-							<div class="panel-group">
-								<div class="panel panel-primary">
-									<div class="panel-heading" data-toggle="collapse" href="#collapse1">
-										<h4 class="panel-title">
-											<a >查看題目</a>
-										</h4>
-									</div>
-									<div id="collapse1" class="panel-collapse collapse">
-										<ul class="list-group">
-											<% for(var i=0; i<question.length; i++) {%>
-												<li class="list-group-item"><%= i+1 %>. <%= question[i] %></li>
-											<% } %>
-										</ul>
-									</div>
-								</div>
-							</div>         
+                <div class="panel-group">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading" data-toggle="collapse" href="#collapse1">
+                            <h4 class="panel-title">
+                                <a >查看題目</a>
+                            </h4>
+                        </div>
+                        <div id="collapse1" class="panel-collapse collapse">
+                            <ul class="list-group">
+                                <% for(var i=0; i<question.length; i++) {%>
+                                    <li class="list-group-item"><%= i+1 %>. <%= question[i] %></li>
+                                <% } %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>         
             </div>
         </section>
 

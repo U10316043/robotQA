@@ -8,31 +8,34 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="css/sign.css">
         <title>signin</title>
     </head>
     <body>
         <div class="container">
-            <div class = "row">
-                <div class="col-md-4 offset-md-4">
-                    <h1 class="text-center login-title">Sign in</h1>
-                    <div class="card">
-                        <div class="card-block">
-                            <form action="/signin" method="post">
-                                <input type="text" name="username" class="form-control" placeholder="帳號" require="true" autofocus>
-                                <input type="password" name="password" class="form-control" placeholder="密碼" require="true" autofocus>
-                                <button class="btn btn-primary btn-block" type="submit">signin</button>
-                                <span class="clearfix"></span>
-                                <% if ( message.length) { %>
-                                    <div id="message">
-                                        <div class="alert alert-danger text-center"> <%= message %></div>
-                                    </div>
-                                <% } %>
-                            </form>
+            <div class="card">
+                <div class="card-block">
+                    <h1 class="text-center login-title">Sign in</h1>    
+                    <form action="/signin" method="post">
+                        <div class="signArea">
+                            <input type="text" name="username" class="form-control" placeholder="帳號" require="true" autofocus>
                         </div>
-                    </div>  
-                    <a type="button" href="./getsignup">Create your personal account.Sign up</a>          
+                        <div class="signArea">
+                            <input type="password" name="password" class="form-control" placeholder="密碼" require="true" autofocus>
+                        </div>
+                        <div class="signArea">
+                            <button class="btn btn-primary btn-block" type="submit">signin</button>
+                        </div>
+                        <span class="clearfix"></span>
+                        <% if ( message.length) { %>
+                            <div id="message">
+                                <div class="alert alert-danger text-center"> <%= message %></div>
+                            </div>
+                        <% } %>
+                    </form>
+                    <a type="button" href="./getsignup">Create your personal account.Sign up</a>               
                 </div>
-            </div>
+            </div>  
         </div>
     </body>
 </html>
