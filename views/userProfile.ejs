@@ -53,9 +53,7 @@
 				<a href="/allRecord" class="w3-bar-item w3-button w3-hover-pale-blue w3-hover-text-green">個人資料設定</a>		
 			</div>
 			<% for (var i = 0; i < lessoninform.length; i++) {%>
-			<a href="/allRecord/<%= lessoninform[i]._id%>" class="w3-bar-item w3-button w3-hover-pale-blue w3-hover-text-green"><%= i+1%>. <%= lessoninform[i].num %>
-				<span class="badge bg-blue pull-right">成績 <%= recordInform.lesson[i].lessonTotalScore%></span>
-			</a>
+			<a href="/allRecord/<%= lessoninform[i]._id%>" class="w3-bar-item w3-button w3-hover-pale-blue w3-hover-text-green"><%= i+1%>. <%= lessoninform[i].num %></a>
 			<% } %>
 		</div>
 		<!-- Right body -->
@@ -65,18 +63,19 @@
 			</div>
 			<br/>
 			<div class="w3-container">
+				個人資料設定
 				<section class="barchart">
-						<div class="container-fluid">
-							<div class="box box-primary">
-								<div class="box-header with-border">
-									<h3 class="box-title">成績折線圖</h3>
-								</div>
-								<div class="box-body chart-responsive">
-									<div id="graph"></div>
-								</div><!-- /.box-body -->
+					<div class="container-fluid">
+						<div class="box box-primary">
+							<div class="box-header with-border">
+								<h3 class="box-title">成績折線圖</h3>
 							</div>
+							<div class="box-body chart-responsive">
+								<div id="graph"></div>
+							</div><!-- /.box-body -->
 						</div>
-					</section>
+					</div>
+				</section>
 				<section id="lessonIntroduction">     
 					<div class="container-fluid"> 
 						<div class="box">   
@@ -91,31 +90,55 @@
 											<th>#</th>
 											<th>課程單元</th>
 											<th>課程名稱</th>
-											<th>綜合分數</th>
-											<th style="width: 40px"> </th>
+											<th>Progress</th>
+											<th style="width: 40px">Label</th>
 											</tr>
 										</thead>
 										<tbody>
-											<% for(var i=0; i < lessoninform.length; i++) { %>
-												<tr href="#">
-													<th scope="row"><%=i +1%></th> 
-														<td>
-															<%= lessoninform[i].num%>
-														</td> 
-														<td>
-															<div class="input-group">
-																<%= lessoninform[i].name%>
-															</div>
-														<td>
-															<div class="progress progress-xs">
-																<div class="progress-bar progress-bar-danger" style="width: <%= recordInform.lesson[i].lessonTotalScore%>%"></div>
-															</div>
-														</td>
-														<td><span class="badge bg-red"><%= recordInform.lesson[i].lessonTotalScore%>%</span></td>              
-													</tr>
-												<% } %>
-											
-											
+											<tr href="#">
+												<th scope="row">1</th> 
+												<td>animal</td> 
+												<td>animal in the zoo</td>      
+												<td>
+													<div class="progress progress-xs">
+														<div class="progress-bar progress-bar-danger" style="width: 100%"></div>
+													</div>
+												</td>
+												<td><span class="badge bg-red">100%</span></td>              
+											</tr>
+											<tr href="#">
+												<th scope="row">2</th> 
+												<td>baby English</td> 
+												<td>Counting number</td>      
+												<td>
+													<div class="progress progress-xs">
+															<div class="progress-bar progress-bar-danger" style="width: 80%"></div>
+													</div>
+												</td>
+												<td><span class="badge bg-red">80%</span></td>              
+											</tr>
+											<tr href="#">
+												<th scope="row">3</th> 
+												<td>baby English lesson 2</td> 
+												<td>what's the color is ?</td>      
+												<td>
+													<div class="progress progress-xs">
+															<div class="progress-bar progress-bar-danger" style="width: 55%"></div>
+													</div>
+												</td>
+												<td><span class="badge bg-red">55%</span></td>              
+											</tr>
+											<tr href="#">
+												<th scope="row">4</th> 
+												<td>health</td> 
+												<td>when you get sick</td>      
+												<td>
+														<div class="progress progress-xs">
+																<div class="progress-bar progress-bar-danger" style="width: 0%"></div>
+														</div>
+												</td>
+												<td><span class="badge bg-red">0%</span></td>              
+											</tr>
 										</tbody>
 									</table>
 								</div><!-- /.box-body -->
@@ -128,23 +151,22 @@
 		</div>
 	</body>
 	<script>
-		var testRecord = <%- JSON.stringify(testRecord)%>.split(",")
-		console.log('testRecord:')
-		console.log(testRecord)
 		// Bar chart
-		var myArray = [];
-		for (var i =0;i< testRecord.length ;i++) {
-			myArray.push({'x': 'test'+(i+1, 'A':testRecord[i]*100 });
-		}		
+Morris.Bar({
+  element: 'graph',
+  data: [
+{x: 'test 1', A: 100},
+{x: 'test 2', A: 20},
+{x: 'test 3', A: 60},
+{x: 'test 4', A: 50},
+{x: 'test 5', A: 80}
 
-		Morris.Bar({
-			element: 'graph',
-			data: myArray,
-			xkey: 'x',
-			ykeys: ['A'],
-			labels: ['成績'],
-			stacked: true
-		})
+],
+  xkey: 'x',
+  ykeys: ['A'],
+  labels: ['成績'],
+  stacked: true
+})
 	</script>
 	<script type="text/javascript"src="/javascripts/allRecord.js"></script>
 </html>

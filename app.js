@@ -116,7 +116,7 @@ app.use(flash())
 app.use('/', index)
 app.use('/', vocabularyRoute)
 app.use('/', lessonRoute)
-app.use('/', examRoute.router)
+app.use('/', examRoute)
 app.use('/', performance)
 app.use('/', allRecord)
 

@@ -14,7 +14,6 @@ var username
 router.post('/selectlesson/:lessonId', function (req, res, next) {
   lessonId = req.params.lessonId
   username = req.user.username
-  console.log('lessonId' + lessonId)
   res.redirect('/lesson/' + req.params.lessonId + '/exam')
 })
 
@@ -54,9 +53,6 @@ router.get('/1/vocabulary', function (req, res, next) {
       for (i = 0; i < index; i++) {
         answerWord[i] = wordList[i].toUpperCase().split('').join(' ')
       }
-      console.log('lessonId: ' + lessonId)
-      console.log('numList: ' + numList)
-      console.log('question: ' + wordList)
       res.json({success: true, question: wordList, answer: answerWord})
     }
   })
@@ -69,7 +65,8 @@ var everyScoreNum = [0, 0, 0, 0, 0] // 每一得分數量(0 -> 4)
 
 // 接收成績(機器人回傳的)
 router.post('/1/perlessonScore', function (req, res) {
-  testResult = req.query.testResult // 機器人回傳的陣列
+  var testResultString = req.body.testResult // 機器人回傳的陣列
+  testResult = testResultString.split(',')
   everyScoreNum = [0, 0, 0, 0, 0] // 每一得分數量 (0 -> 4)
   totalResult = 0
   res.send({status: 'success', testResult: testResult})
@@ -88,23 +85,11 @@ router.post('/1/perlessonScore', function (req, res) {
       everyScoreNum[0]++
     }
   }
-  console.log('lesson ID: ' + lessonId)
-  console.log('lessonList ID: ' + lessonList._id + ' , lessonList num :' + lessonList.num)
-  console.log('題目: ' + wordList)
-  console.log('分數(題目): ' + testResult)
-  console.log('numList: ' + numList)
-  console.log('單字: ' + lessonList.vocabulary)
-  console.log('分數(資料庫): ' + testResultOrder)
-  console.log('總得分: ' + totalResult)
-  console.log('每一分數的題目個數: ' + everyScoreNum)
-
   Record.findOne({ 'username': username, 'lesson.lessonId': lessonId }, {'lesson.$': 1}, function (err, lessonExist) {
     var testRecord = totalResult / (4 * wordList.length) // 單字得分加總換算成百分比
-    console.log('單字得分加總百分比: ' + testRecord)
     if (err) {
       throw err
     } else if (!lessonExist) { // 無考過試第一次存入資料庫
-      console.log('第一次練習！')
       Record.findOneAndUpdate(
         {username: username},
         {$push: {
@@ -124,19 +109,14 @@ router.post('/1/perlessonScore', function (req, res) {
         }
       )
     } else {
-      console.log('第n次練習！準備存儲！')
       var testTimes = lessonExist.lesson[0].testTimes + 1
-      console.log('上一次的單字總分: ' + lessonExist.lesson[0].wordTotalScore)
       for (var i = 0; i < numList.length; i++) {
         lessonExist.lesson[0].wordTotalScore[i] = parseInt(lessonExist.lesson[0].wordTotalScore[i]) + parseInt(testResultOrder[i])
       }
-      console.log('這次的單字總分: ' + lessonExist.lesson[0].wordTotalScore)
       var lessonTotalScore = 0
       for (i = 0; i < testTimes - 1; i++) {
         lessonTotalScore += lessonExist.lesson[0].testRecord[i]
       }
-      console.log('上一次的課程綜合成績: ' + lessonTotalScore)
-
       async.auto({
         insertRecord: function () {
           Record.update(
@@ -146,7 +126,6 @@ router.post('/1/perlessonScore', function (req, res) {
               'lesson.$.testTimes': testTimes,
               'lesson.$.lessonTotalScore': parseInt(((lessonTotalScore + testRecord) / testTimes) * 100)
             }},
-            console.log('我來了了'),
             function (err) {
               if (err) {
                 throw err
@@ -158,7 +137,6 @@ router.post('/1/perlessonScore', function (req, res) {
           Record.update(
             {'username': username, 'lesson.lessonId': lessonId},
             {$push: { 'lesson.$.testRecord': testRecord }},
-            console.log('我存了了'),
             function (err) {
               if (err) {
                 throw err
@@ -171,9 +149,4 @@ router.post('/1/perlessonScore', function (req, res) {
   })
 })
 
-module.exports = {
-  router,
-  numList,
-  wordList,
-  testResult
-}
+module.exports = router
