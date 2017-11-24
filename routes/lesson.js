@@ -47,18 +47,22 @@ router.get('/deletecourse/:lesson_id', function (req, res) {
       throw err
     }
   })
-  Record.find({lesson: {$elemMatch: {lessonId: req.params.lesson_id}}}, function (err, noLesson) {
-    if (err) {
-      throw err
-    } else {
-      console.log('noLesson: ')
-      console.log(noLesson)
-    }
-  })
   Record.update(
-    {lesson: {$elemMatch: {lessonId: req.params.lesson_id}}},
+    {lesson: {$elemMatch: {lessonId: req.params.lesson_id, testTimes: {$ne: 0}}}},
     {$set: {
       'lesson.$.isActive': false
+    }},
+    {multi: true},
+    function (err) {
+      if (err) {
+        throw err
+      }
+    }
+  )
+  Record.update(
+    {lesson: {$elemMatch: {lessonId: req.params.lesson_id, testTimes: 0}}},
+    {$pull: {
+      lesson: {lessonId: req.params.lesson_id}
     }},
     {multi: true},
     function (err) {
