@@ -6,23 +6,56 @@ var Record = require('../models/record.js')
 var lessonList = {}
 var recordList = {}
 var perLessonRecord = {}
-// get all record
+
+// userProfile
 router.get('/allRecord', function (req, res, next) {
   if (req.isAuthenticated() === true) {
-    Lesson.find(function (err, lesson) {
-      if (err) {
-        throw err
-      } else {
-        lessonList = lesson
-      }
-      res.render('userProfile', { lessoninform: lessonList, user: req.user, loginStatus: req.isAuthenticated() })
+    async.auto({
+      fun1: function (finish) {
+        Lesson.find(function (err, lesson) {
+          if (err) {
+            throw err
+          } else {
+            lessonList = lesson
+            console.log('lessonlist!!!!!!!')
+            console.log(lessonList)
+            console.log('lessonlist!!!!!!!')
+          }
+        })
+        finish(null)   // 會傳到 results
+      },
+      fun2: ['fun1', function (results, finish) {
+        Record.find({'username': req.user.username}, function (err, recordResult) {
+          if (err) {
+            throw err
+          } else if (!recordResult) {
+            console.log('不存在此人的記錄')
+          } else {
+            console.log('這個user的記錄：recordResult')
+            console.log(recordResult)
+            recordList = recordResult
+            console.log('recordList')
+            console.log(recordList)
+            res.render('userProfile', { recordInform: recordList, lessoninform: lessonList, user: req.user, loginStatus: req.isAuthenticated() })
+          }
+        })
+        finish(null)
+      }],
+      fun3: ['fun1', 'fun2', function (results, finish) {
+        finish(null)
+        
+      }]
+
+    }, function (err, results) {
+      if (err) console.log(err)
+      console.log(results)
     })
   } else {
     res.render('error')
   }
 })
 
-
+// get all record
 router.get('/allRecord/:lessonId', function (req, res, next) {
   if (req.isAuthenticated() === true) {
     async.auto({

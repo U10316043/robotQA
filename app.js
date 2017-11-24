@@ -16,6 +16,7 @@ var bcrypt = require('bcrypt-nodejs')
 // DB models
 var User = require('./models/user.js')
 var Record = require('./models/record.js')
+var Lesson = require('./models/lesson.js')
 // route
 var index = require('./routes/index')
 var vocabularyRoute = require('./routes/vocabulary')
@@ -48,6 +49,31 @@ passport.use('login', new LocalStrategy({
         return done(null, false, req.flash('info', 'User not found.'))
       }
       var isValidPassword = function (user, password) {
+        Lesson.find(function (err, lesson) { // 比對recordDB的課程是不是都有更新（含有全部lessonDB的課程）
+          if (err) {
+            throw err
+          } else {
+            for (var i = 0; i < lesson.length; i++) {
+              console.log(lesson[i]._id)
+              Record.update(
+                {username: username, lesson: {'$not': { '$elemMatch': { 'lessonId': lesson[i]._id } }}},
+                {$addToSet: {
+                  lesson: {
+                    'lessonId': lesson[i]._id,
+                    'lessonNum': lesson[i].num,
+                    'lessonName': lesson[i].name
+                  }
+                }
+                },
+                function (err, result) {
+                  if (err) {
+                    throw err
+                  }
+                }
+              )
+            }
+          }
+        })
         return bcrypt.compareSync(password, user.password)
       }
       if (!isValidPassword(user, password)) {
@@ -85,6 +111,30 @@ passport.use('ppsignup', new LocalStrategy(
             Record.insertMany({username: username}, function (err) {
               if (err) {
                 throw err
+              }
+            })
+            Lesson.find(function (err, lesson) {
+              if (err) {
+                throw err
+              } else {
+                for (var i = 0; i < lesson.length; i++) {
+                  Record.findOneAndUpdate(
+                    {username: username},
+                    {$push: {
+                      lesson: {
+                        lessonId: lesson[i]._id,
+                        lessonNum: lesson[i].num,
+                        lessonName: lesson[i].name
+                      }
+                    }
+                    },
+                    function (err, result) {
+                      if (err) {
+                        throw err
+                      }
+                    }
+                  )
+                }
               }
             })
             return done(null, user, req.flash('info', '已經進入註冊函數'))

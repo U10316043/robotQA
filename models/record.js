@@ -9,7 +9,7 @@ var recordSchema = new Schema({
     lessonName: String,
     isActive: { type: Boolean, default: true },
     lessonTotalScore: Number, // 整個課程的綜合成績
-    testTimes: Number, // 測驗次數
+    testTimes: { type: Number, default: 0 }, // 測驗次數
     wordTotalScore: [], // 每次測驗的單字得分加總
     testRecord: [] // 每次考試的分數
   }]

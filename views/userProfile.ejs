@@ -52,9 +52,23 @@
 				<br/><br/>
 				<a href="/allRecord" class="w3-bar-item w3-button w3-hover-pale-blue w3-hover-text-green">個人資料設定</a>		
 			</div>
-			<% for (var i = 0; i < lessoninform.length; i++) {%>
-			<a href="/allRecord/<%= lessoninform[i]._id%>" class="w3-bar-item w3-button w3-hover-pale-blue w3-hover-text-green"><%= i+1%>. <%= lessoninform[i].num %></a>
+			<% for (var i = 0; i < recordInform[0].lesson.length; i++) {%>
+				<%if (recordInform[0].lesson[i].isActive === true) {%>
+				<a href="/allRecord/<%= recordInform[0].lesson[i].lessonId%>" class="w3-bar-item w3-button w3-hover-pale-blue w3-hover-text-green">
+					<%= i+1%>. <%= recordInform[0].lesson[i].lessonNum%>		
+					<span class="badge bg-blue pull-right">成績 <%= recordInform[0].lesson[i].lessonTotalScore%></span>
+				</a>
+				<%} else if (recordInform[0].lesson[i].isActive === false) {%>
+				<a href="/allRecord/<%= recordInform[0].lesson[i].lessonId%>" class="w3-bar-item w3-button w3-hover-pale-blue w3-hover-text-green">
+					<%= i+1%>. <%= recordInform[0].lesson[i].lessonNum%>	
+					<span class="badge bg-navy pull-right">成績 <%= recordInform[0].lesson[i].lessonTotalScore%></span>
+				</a>
+				<%}%>
 			<% } %>
+			<div class="user-panel w3-blue-gray ">未進行課程記錄</div>
+			<a>dff</a>
+			<div class="user-panel w3-blue-gray ">已刪除的課程記錄</div>
+			
 		</div>
 		<!-- Right body -->
 		<div class="w3-main" style="margin-left:200px">

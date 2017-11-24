@@ -93,7 +93,7 @@ router.post('/1/perlessonScore', function (req, res) {
     var testRecord = totalResult / (4 * wordList.length) // 單字得分加總換算成百分比
     if (err) {
       throw err
-    } else if (!lessonExist) { // 無考過試第一次存入資料庫
+    } else if (!lessonExist) { // 無課程資料存入資料庫
       Record.findOneAndUpdate(
         {username: username},
         {$push: {
@@ -116,33 +116,28 @@ router.post('/1/perlessonScore', function (req, res) {
         }
       )
     } else {
-      // 已有一次記錄增加記錄
-      var testTimes = lessonExist.lesson[0].testTimes + 1
-      for (var i = 0; i < numList.length; i++) {
-        lessonExist.lesson[0].wordTotalScore[i] = parseInt(lessonExist.lesson[0].wordTotalScore[i]) + parseInt(testResultOrder[i])
-      }
-      var lessonTotalScore = 0
-      for (i = 0; i < testTimes - 1; i++) {
-        lessonTotalScore += lessonExist.lesson[0].testRecord[i]
-      }
-      async.auto({
-        insertRecord: function () {
-          Record.update(
-            { 'username': username, 'lesson.lessonId': lessonId },
-            {$set: {
-              'lesson.$.wordTotalScore': lessonExist.lesson[0].wordTotalScore,
-              'lesson.$.testTimes': testTimes,
-              'lesson.$.lessonTotalScore': parseInt(((lessonTotalScore + testRecord) / testTimes) * 100)
-            }},
-            function (err) {
-              if (err) {
-                throw err
+      // 第一次記錄成績
+      if (lessonExist.lesson[0].testTimes < 1) {
+        console.log('有課程資料')
+        async.auto({
+          insertRecord1: function () {
+            Record.update(
+              { 'username': username, 'lesson.lessonId': lessonId },
+              {$set: {
+                'lesson.$.wordTotalScore': testResultOrder,
+                  'lesson.$.testTimes': 1,
+                  'lesson.$.lessonTotalScore': parseInt(testRecord * 100)
               }
-            }
-          )
-        },
-        insertEveryTestScore: function () {
-          Record.update(
+              },
+              function (err, result) {
+                if (err) {
+                  throw err
+                }
+              }
+            )
+          },
+          insertEveryTestScore1: function () {
+            Record.update(
             {'username': username, 'lesson.lessonId': lessonId},
             {$push: { 'lesson.$.testRecord': testRecord }},
             function (err) {
@@ -151,8 +146,47 @@ router.post('/1/perlessonScore', function (req, res) {
               }
             }
           )
+          }
+        })
+      } else {
+      // 已有一次記錄增加記錄
+        var testTimes = lessonExist.lesson[0].testTimes + 1
+        for (var i = 0; i < numList.length; i++) {
+          lessonExist.lesson[0].wordTotalScore[i] = parseInt(lessonExist.lesson[0].wordTotalScore[i]) + parseInt(testResultOrder[i])
         }
-      })
+        var lessonTotalScore = 0
+        for (i = 0; i < testTimes - 1; i++) {
+          lessonTotalScore += lessonExist.lesson[0].testRecord[i]
+        }
+        async.auto({
+          insertRecord: function () {
+            Record.update(
+            { 'username': username, 'lesson.lessonId': lessonId },
+              {$set: {
+                'lesson.$.wordTotalScore': lessonExist.lesson[0].wordTotalScore,
+                'lesson.$.testTimes': testTimes,
+                'lesson.$.lessonTotalScore': parseInt(((lessonTotalScore + testRecord) / testTimes) * 100)
+              }},
+            function (err) {
+              if (err) {
+                throw err
+              }
+            }
+            )
+          },
+          insertEveryTestScore: function () {
+            Record.update(
+            {'username': username, 'lesson.lessonId': lessonId},
+            {$push: { 'lesson.$.testRecord': testRecord }},
+            function (err) {
+              if (err) {
+                throw err
+              }
+            }
+          )
+          }
+        })
+      }
     }
   })
 })
