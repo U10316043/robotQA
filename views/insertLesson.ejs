@@ -20,19 +20,29 @@
             <nav class="navbar navbar-static-top">
                 <div class="container-fluid">
                     <div class="navbar-header">
+                        <% if (loginStatus){ %>
                         <a class = "navbar-brand" href="/insertLesson"><b><%= user.nickname %>  Home</b></a>
+                        <% } else {%>
+                            <a class = "navbar-brand" href="/insertLesson"><b> Home</b></a>
+                        <% } %>
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
                         <span class="glyphicon glyphicon-menu-hamburger"></span>
                     </button>
                     </div>
-            
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="navbar-collapse">
+                        <% if (loginStatus){ %>
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="/allRecord" class="btn btn-primary">個人資料</a></li>
                             <li><a href="/signout" class="btn btn-primary">登出</a></li>
-                        </ul>       
-                    </div>     
+                        </ul>      
+                        <% } else { %>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a href="/getsignup" class="btn btn-primary">註冊</a></li>
+                                <li><a href="/" class="btn btn-primary">登入</a></li>
+                            </ul>   
+                        <% } %> 
+                    </div>
                 </div>
             </nav>
         </header>     
@@ -82,7 +92,7 @@
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#lessonModal" >新增課程</button>                                
                         </div>
-                        <% } %>
+                        <% }%>
                     </div>
                     <div class="box-body">
                         <table class="table">

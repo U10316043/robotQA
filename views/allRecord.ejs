@@ -63,20 +63,27 @@
 					<span class="badge bg-blue pull-right">成績 <%= hasRecord[i].lessonTotalScore%></span>
 				</a>
 			<% } %>
-			<div class="user-panel w3-blue-gray ">未進行課程記錄</div>
-			<% for (var i = 0; i < noTest.length; i ++) {%>
-				<a href="/allRecord/<%= noTest[i].lessonId%>" class="w3-bar-item w3-button w3-hover-pale-blue w3-hover-text-green">
-					<%= i+1%>. <%= noTest[i].lessonNum%>	
-					<span class="badge bg-red pull-right">未進行測驗</span>
-				</a>
-			<% } %>
-			<div class="user-panel w3-blue-gray ">已刪除的課程記錄</div>
-			<% for (var i = 0; i < noActive.length; i ++) {%>
-				<a href="/allRecord/<%= noActive[i].lessonId%>" class="w3-bar-item w3-button w3-hover-pale-blue w3-hover-text-green">
-					<%= i+1%>. <%= noActive[i].lessonNum%>	
-					<span class="badge bg-navy pull-right">成績 <%= noActive[i].lessonTotalScore%></span>
-				</a>
-			<% } %>
+			<div class="user-panel w3-cyan " data-toggle="collapse" data-target="#noTestRecord">未進行課程記錄 <span class="glyphicon glyphicon-triangle-right"></span></div>
+			<div id="noTestRecord" class="in collapse">
+				<% for (var i = 0; i < noTest.length; i ++) {%>
+					<a href="/allRecord/<%= noTest[i].lessonId%>" class="w3-bar-item w3-button w3-hover-pale-blue w3-hover-text-green">
+						<%= i+1%>. <%= noTest[i].lessonNum%>	
+						<span class="badge bg-red pull-right">未進行測驗</span>
+					</a>
+				<% } %>
+			</div>
+			
+			
+			<div class="user-panel w3-cyan" data-toggle="collapse" data-target="#noActiveRecord">測驗課程已刪除記錄 <span class="glyphicon glyphicon-triangle-right"></span></div>
+			<div id="noActiveRecord" class="in collapse">
+				<% for (var i = 0; i < noActive.length; i ++) {%>
+					<a href="/allRecord/<%= noActive[i].lessonId%>"   class="w3-bar-item w3-button w3-hover-pale-blue w3-hover-text-green">
+						<%= i+1%>. <%= noActive[i].lessonNum%>	
+						<span class="badge bg-navy pull-right">成績 <%= noActive[i].lessonTotalScore%></span>
+					</a>
+				<% } %>
+			</div>
+				
 		</div>
 		<!-- Right body -->
 		<div class="w3-main" style="margin-left:200px">
@@ -85,9 +92,19 @@
 			</div>
 			<br/>
 			<div class="w3-container">
-				<%if(perLessonRecord.lesson[0].testTimes === 0) {%>
-					<a href="/lesson/<%= perLessonRecord.lesson[0].lessonId%>"class="list-group-item list-group-item-action btn btn-primary">進入課程單字列表</a>					
-				<%} else {%>
+				<div class="well">
+					課程單元：<%= perLessonRecord.lesson[0].lessonNum%> / 課程名稱：<%= perLessonRecord.lesson[0].lessonName%>
+					
+					<%if(perLessonRecord.lesson[0].isActive === true) {%>
+						<div class="box-tools pull-right">
+							<a href="/lesson/<%= perLessonRecord.lesson[0].lessonId%>"class=" btn btn-primary">進入課程單字列表</a>						
+						</div>
+					<%}%>
+					<%if(perLessonRecord.lesson[0].testTimes !== 0) {%>
+						<div>綜合成績: <%= perLessonRecord.lesson[0].lessonTotalScore%></div>
+					<%}%>
+				</div>
+				<%if(perLessonRecord.lesson[0].testTimes !== 0) {%>
 				<section class="barchart">
 					<div class="container-fluid">
 						<div class="box box-primary">
@@ -106,22 +123,21 @@
 	</body>
 	<script>
 		var testRecord = <%- JSON.stringify(testRecord)%>.split(",")
-		console.log('這裡testRecord:')
-		console.log(testRecord)
 		// Bar chart
-		var myArray = [];
-		for (var i =0;i< testRecord.length ;i++) {
-			myArray.push({'x': 'test'+(i+1), 'A':(testRecord[i]*100).toFixed(1) });
-		}		
-
-		Morris.Bar({
-			element: 'graph',
-			data: myArray,
-			xkey: 'x',
-			ykeys: ['A'],
-			labels: ['成績'],
-			stacked: true
-		})
+		if (testRecord != '0'){
+			var myArray = [];
+			for (var i =0;i< testRecord.length ;i++) {
+				myArray.push({'x': 'test'+(i+1), 'A':(testRecord[i]*100).toFixed(1) });
+			}
+			Morris.Bar({
+				element: 'graph',
+				data: myArray,
+				xkey: 'x',
+				ykeys: ['A'],
+				labels: ['成績'],
+				stacked: true
+			})
+		}	
 	</script>
 	<script type="text/javascript"src="/javascripts/allRecord.js"></script>
 </html>

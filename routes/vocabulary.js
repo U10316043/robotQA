@@ -7,12 +7,12 @@ var Record = require('../models/record.js')
 var lessonList = {}
 var wordTotalScore = []
 router.get('/lesson/:lessonId', function (req, res, next) {
-  if (req.isAuthenticated() === true) {
-    Lesson.findOne({_id: req.params.lessonId}, function (err, lesson) {
-      if (err) {
-        throw err
-      } else {
-        lessonList = lesson
+  Lesson.findOne({_id: req.params.lessonId}, function (err, lesson) {
+    if (err) {
+      throw err
+    } else {
+      lessonList = lesson
+      if (req.isAuthenticated() === true) {
         Record.findOne({'username': req.user.username, 'lesson.lessonId': req.params.lessonId}, {'lesson.$': 1}, function (err, recordResult) {
           if (err) {
             throw err
@@ -31,13 +31,13 @@ router.get('/lesson/:lessonId', function (req, res, next) {
               }
             }
           }
-          res.render('insertWord', { wordTotalScore: wordTotalScore, lessonindex: req.params.lessonId, lessoninform: lessonList, user: req.user, loginStatus: req.isAuthenticated() })          
+          res.render('insertWord', { wordTotalScore: wordTotalScore, lessonindex: req.params.lessonId, lessoninform: lessonList, user: req.user, loginStatus: req.isAuthenticated() })
         })
+      } else {
+        res.render('insertWord', { wordTotalScore: wordTotalScore, lessonindex: req.params.lessonId, lessoninform: lessonList, user: req.user, loginStatus: req.isAuthenticated() })
       }
-    })
-  } else {
-    res.render('error')
-  }
+    }
+  })
 })
 
 // POST /新增單字

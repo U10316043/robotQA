@@ -6,24 +6,20 @@ var Record = require('../models/record.js')
 // get課程列表
 var lessonList = {}
 router.get('/insertLesson', function (req, res, next) {
-  if (req.isAuthenticated() === true) {
-    Lesson.find(function (err, lesson) {
-      if (err) {
-        throw err
-      } else {
-        lessonList = lesson
+  Lesson.find(function (err, lesson) {
+    if (err) {
+      throw err
+    } else {
+      lessonList = lesson
+    }
+    res.render('insertLesson',
+      {
+        lessoninform: lessonList,
+        user: req.user,
+        loginStatus: req.isAuthenticated()
       }
-      res.render('insertLesson',
-        {
-          lessoninform: lessonList,
-          user: req.user,
-          loginStatus: req.isAuthenticated()
-        }
-      )
-    })
-  } else {
-    res.render('error')
-  }
+    )
+  })
 })
 
 // POST新增課程

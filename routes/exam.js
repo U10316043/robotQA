@@ -27,7 +27,7 @@ router.get('/lesson/:lessonId/exam', function (req, res, next) {
       if (err) {
         throw err
       } else {
-        res.render('exam', { question: wordList, answer: answerWord, lessonindex: req.params.lessonId, lessoninform: lessonList, user: req.user, loginStatus: req.isAuthenticated() })
+        res.render('exam', { question: wordList, answer: answerWord, lessonindex: req.params.lessonId, lessoninform: lessonList, user: req.user})
       }
     })
   } else {
