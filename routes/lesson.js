@@ -90,6 +90,19 @@ router.post('/editcourse/:lesson_id', function (req, res) {
       }
     }
   )
+  Record.update(
+    {lesson: {$elemMatch: {lessonId: req.params.lesson_id}}},
+    {$set: {
+      'lesson.$.lessonNum': req.body.lessonNum,
+      'lesson.$.lessonName': req.body.lessonName
+    }},
+    {multi: true},
+    function (err) {
+      if (err) {
+        throw err
+      }
+    }
+  )
   res.redirect('/insertLesson')
 })
 
