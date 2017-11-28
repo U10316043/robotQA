@@ -18,12 +18,17 @@ router.get('/lesson/:lessonId', function (req, res, next) {
             throw err
           } else if (!recordResult) {
             for (var i = 0; i < 10; i++) {
-              wordTotalScore[i] = 0
+              wordTotalScore[i] = NaN
             }
           } else {
-            console.log(recordResult)
-            for (i = 0; i < recordResult.lesson[0].wordTotalScore.length; i++) {
-              wordTotalScore[i] = parseInt(recordResult.lesson[0].wordTotalScore[i] * 100 / (4 * recordResult.lesson[0].testTimes))
+            if (recordResult.lesson[0].testTimes === 0) {
+              for (i = 0; i < 10; i++) {
+                wordTotalScore[i] = NaN
+              }
+            } else {
+              for (i = 0; i < recordResult.lesson[0].wordTotalScore.length; i++) {
+                wordTotalScore[i] = parseInt(recordResult.lesson[0].wordTotalScore[i] * 100 / (4 * recordResult.lesson[0].testTimes))
+              }
             }
           }
           res.render('insertWord', { wordTotalScore: wordTotalScore, lessonindex: req.params.lessonId, lessoninform: lessonList, user: req.user, loginStatus: req.isAuthenticated() })          
@@ -73,27 +78,20 @@ router.get('/lesson/:lessonId/deleteVocabulary/:word/:index', function (req, res
     }
   )
   var index = req.params.index
-  console.log('index: ' + index)
-  Record.update(
-    { },
-    { $unset: { 'lesson.0.wordTotalScore.index': 1 } },
-    { multi: true },
-    function (err, result) {
-      if (err) {
-        throw err
-      }
-    }
-  )
-  Record.update(
-    { },
-    { $pull: { 'lesson.0.wordTotalScore': null } },
-    { multi: true },
-    function (err, result) {
-      if (err) {
-        throw err
-      }
-    }
-  )
+  console.log('word: ' + req.params.word + '///  index: ' + index)
+  
+  // Record.update(
+  //   {lesson: {$elemMatch: {lessonId: req.params.lesson_id, testTimes: {$ne: 0}}}},
+  //   {$pull: {
+  //     lesson: { 'wordTotalScore':  }{$unset: {wordTotalScore:1}}
+  //   }},
+  //   {multi: true},
+  //   function (err) {
+  //     if (err) {
+  //       throw err
+  //     }
+  //   }
+  // )
   var path = '/lesson/' + req.params.lessonId
   res.redirect(path)
 })

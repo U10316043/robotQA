@@ -12,10 +12,14 @@
         <link href="https://cdn.bootcss.com/admin-lte/2.4.2/css/alt/AdminLTE-without-plugins.css" rel="stylesheet">
         <link href="https://cdn.bootcss.com/admin-lte/2.4.2/css/skins/_all-skins.css" rel="stylesheet">
         <link href="https://cdn.bootcss.com/admin-lte/2.4.2/css/skins/skin-black-light.css" rel="stylesheet">
-        <link href="https://cdn.bootcss.com/admin-lte/2.4.2/css/skins/skin-black.css" rel="stylesheet">
+		<link href="https://cdn.bootcss.com/admin-lte/2.4.2/css/skins/skin-black.css" rel="stylesheet">
+		
         <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-        <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
-				<script src="http://cdn.oesmith.co.uk/morris-0.4.1.min.js"></script>
+		<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+		
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+		<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <title>exam</title>
 	</head>
@@ -40,6 +44,7 @@
 			</nav>
 		</header>     
 		<!-- Left sidebar column. contains the logo and sidebar -->
+		<!-- Left sidebar column. contains the logo and sidebar -->
 		<div class="w3-sidebar w3-light-blue w3-bar-block w3-collapse w3-card w3-animate-left" style="width:200px;left:0;" id="mySidebar">
 			<button class="w3-bar-item w3-button w3-large w3-hide-large" onclick="w3_close()">Close &times;</button>
 			<div class="user-panel w3-blue-gray ">
@@ -52,10 +57,25 @@
 				<br/><br/>
 				<a href="/allRecord" class="w3-bar-item w3-button w3-hover-pale-blue w3-hover-text-green">個人資料設定</a>		
 			</div>
-			<% for (var i = 0; i < lessoninform.length; i++) {%>
-			<a href="/allRecord/<%= lessoninform[i]._id%>" class="w3-bar-item w3-button w3-hover-pale-blue w3-hover-text-green"><%= i+1%>. <%= lessoninform[i].num %>
-				<span class="badge bg-blue pull-right">成績 <%= recordInform.lesson[i].lessonTotalScore%></span>
-			</a>
+			<% for (var i = 0; i < hasRecord.length; i ++) {%>
+				<a href="/allRecord/<%= hasRecord[i].lessonId%>" class="w3-bar-item w3-button w3-hover-pale-blue w3-hover-text-green">
+					<%= i+1%>. <%= hasRecord[i].lessonNum%>	
+					<span class="badge bg-blue pull-right">成績 <%= hasRecord[i].lessonTotalScore%></span>
+				</a>
+			<% } %>
+			<div class="user-panel w3-blue-gray ">未進行課程記錄</div>
+			<% for (var i = 0; i < noTest.length; i ++) {%>
+				<a href="/allRecord/<%= noTest[i].lessonId%>" class="w3-bar-item w3-button w3-hover-pale-blue w3-hover-text-green">
+					<%= i+1%>. <%= noTest[i].lessonNum%>	
+					<span class="badge bg-red pull-right">未進行測驗</span>
+				</a>
+			<% } %>
+			<div class="user-panel w3-blue-gray ">已刪除的課程記錄</div>
+			<% for (var i = 0; i < noActive.length; i ++) {%>
+				<a href="/allRecord/<%= noActive[i].lessonId%>" class="w3-bar-item w3-button w3-hover-pale-blue w3-hover-text-green">
+					<%= i+1%>. <%= noActive[i].lessonNum%>	
+					<span class="badge bg-navy pull-right">成績 <%= noActive[i].lessonTotalScore%></span>
+				</a>
 			<% } %>
 		</div>
 		<!-- Right body -->
@@ -65,76 +85,33 @@
 			</div>
 			<br/>
 			<div class="w3-container">
+				<%if(perLessonRecord.lesson[0].testTimes === 0) {%>
+					<a href="/lesson/<%= perLessonRecord.lesson[0].lessonId%>"class="list-group-item list-group-item-action btn btn-primary">進入課程單字列表</a>					
+				<%} else {%>
 				<section class="barchart">
-						<div class="container-fluid">
-							<div class="box box-primary">
-								<div class="box-header with-border">
-									<h3 class="box-title">成績折線圖</h3>
-								</div>
-								<div class="box-body chart-responsive">
-									<div id="graph"></div>
-								</div><!-- /.box-body -->
+					<div class="container-fluid">
+						<div class="box box-primary">
+							<div class="box-header with-border">
+								<h3 class="box-title">成績折線圖</h3>
 							</div>
+							<div class="box-body chart-responsive">
+								<div id="graph"></div>
+							</div><!-- /.box-body -->
 						</div>
-					</section>
-				<section id="lessonIntroduction">     
-					<div class="container-fluid"> 
-						<div class="box">   
-							<div class="box box-solid box-primary">
-								<div class="box-header with-border">
-										<h3 class="box-title">課程列表</h3>
-								</div>
-								<div class="box-body">
-									<table class="table table-striped">
-										<thead>
-											<tr>
-											<th>#</th>
-											<th>課程單元</th>
-											<th>課程名稱</th>
-											<th>綜合分數</th>
-											<th style="width: 40px"> </th>
-											</tr>
-										</thead>
-										<tbody>
-											<% for(var i=0; i < lessoninform.length; i++) { %>
-												<tr href="#">
-													<th scope="row"><%=i +1%></th> 
-														<td>
-															<%= lessoninform[i].num%>
-														</td> 
-														<td>
-															<div class="input-group">
-																<%= lessoninform[i].name%>
-															</div>
-														<td>
-															<div class="progress progress-xs">
-																<div class="progress-bar progress-bar-danger" style="width: <%= recordInform.lesson[i].lessonTotalScore%>%"></div>
-															</div>
-														</td>
-														<td><span class="badge bg-red"><%= recordInform.lesson[i].lessonTotalScore%>%</span></td>              
-													</tr>
-												<% } %>
-											
-											
-										</tbody>
-									</table>
-								</div><!-- /.box-body -->
-							</div>
-						</div><!-- /.box -->   
-					</div><!-- /.container -->            
-				</section>   
-				<!-- BAR CHART -->			
+					</div>
+				</section>
+				<%}%>			
 			</div>
 		</div>
 	</body>
 	<script>
 		var testRecord = <%- JSON.stringify(testRecord)%>.split(",")
-		console.log('testRecord:')
+		console.log('這裡testRecord:')
 		console.log(testRecord)
 		// Bar chart
 		var myArray = [];
 		for (var i =0;i< testRecord.length ;i++) {
-			myArray.push({'x': 'test'+(i+1, 'A':testRecord[i]*100 });
+			myArray.push({'x': 'test'+(i+1), 'A':(testRecord[i]*100).toFixed(1) });
 		}		
 
 		Morris.Bar({
