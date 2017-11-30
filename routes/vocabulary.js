@@ -43,6 +43,8 @@ router.get('/lesson/:lessonId', function (req, res, next) {
 // POST /新增單字
 router.post('/lesson/:lessonId/addword', function (req, res) {
   Lesson.findOne({ 'vocabulary.word': req.body.word }, function (err, theWordInDb) {
+    console.log('theWordInDb')
+    console.log(theWordInDb)
     if (err) {
       throw err
     } else if (!theWordInDb) {
@@ -53,13 +55,25 @@ router.post('/lesson/:lessonId/addword', function (req, res) {
           if (err) {
             throw err
           }
+          Record.update(
+            {lesson: {$elemMatch: {lessonId: req.params.lessonId}}},
+            {$pull: {
+              lesson: {lessonId: req.params.lessonId}
+            }},
+            {multi: true},
+            function (err) {
+              if (err) {
+                throw err
+              }
+              var path = '/lesson/' + req.params.lessonId
+              res.redirect(path)
+            }
+          )
         }
       )
-      var path = '/lesson/' + req.params.lessonId
-      res.redirect(path)
     } else {
       console.log('The word already exist!')
-      path = '/lesson/' + req.params.lessonId
+      var path = '/lesson/' + req.params.lessonId
       res.redirect(path)
     }
   })
@@ -74,31 +88,29 @@ router.get('/lesson/:lessonId/deleteVocabulary/:word/:index', function (req, res
       if (err) {
         throw err
       }
-      console.log(req.params.word)
+    })
+  Record.update(
+    {lesson: {$elemMatch: {lessonId: req.params.lessonId}}},
+    {$pull: {
+      lesson: {lessonId: req.params.lessonId}
+    }},
+    {multi: true},
+    function (err) {
+      if (err) {
+        throw err
+      }
     }
   )
-  var index = req.params.index
-  console.log('word: ' + req.params.word + '///  index: ' + index)
-  
-  // Record.update(
-  //   {lesson: {$elemMatch: {lessonId: req.params.lesson_id, testTimes: {$ne: 0}}}},
-  //   {$pull: {
-  //     lesson: { 'wordTotalScore':  }{$unset: {wordTotalScore:1}}
-  //   }},
-  //   {multi: true},
-  //   function (err) {
-  //     if (err) {
-  //       throw err
-  //     }
-  //   }
-  // )
+
   var path = '/lesson/' + req.params.lessonId
   res.redirect(path)
 })
 
 // 修改單字
 router.post('/lesson/:lessonId/editVocabulary/:word', function (req, res) {
-  Lesson.findOne({ vocabulary: {word: req.body.word} }, function (err, theWordInDb) {
+  Lesson.findOne({ 'vocabulary.word': req.body.vocabularyUpdate }, function (err, theWordInDb) {
+    console.log('theWordInDb')
+    console.log(theWordInDb)
     if (err) {
       throw err
     } else if (!theWordInDb) {
@@ -110,13 +122,27 @@ router.post('/lesson/:lessonId/editVocabulary/:word', function (req, res) {
           if (err) {
             throw err
           }
+          Record.update(
+            {lesson: {$elemMatch: {lessonId: req.params.lessonId}}},
+            {$pull: {
+              lesson: {lessonId: req.params.lessonId}
+            }},
+            {multi: true},
+            function (err) {
+              if (err) {
+                throw err
+              }
+              var path = '/lesson/' + req.params.lessonId
+              res.redirect(path)
+            }
+          )
         }
       )
     } else {
       console.log('The word already exist!')
+      var path = '/lesson/' + req.params.lessonId
+      res.redirect(path)
     }
-    var path = '/lesson/' + req.params.lessonId
-    res.redirect(path)
   })
 })
 

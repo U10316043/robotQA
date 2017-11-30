@@ -6,7 +6,7 @@ var Record = require('../models/record.js')
 var numList = []// 出題單字排序（資料庫中單字的index亂數排序）
 var wordList = []// question
 var answerWord = []// answer
-
+var wordOrder = []
 // 取得考試的lessonId和測驗對象username
 var lessonList = {}
 var lessonId
@@ -27,7 +27,7 @@ router.get('/lesson/:lessonId/exam', function (req, res, next) {
       if (err) {
         throw err
       } else {
-        res.render('exam', { question: wordList, answer: answerWord, lessonindex: req.params.lessonId, lessoninform: lessonList, user: req.user})
+        res.render('exam', {question: wordList, answer: answerWord, lessonindex: req.params.lessonId, lessoninform: lessonList, user: req.user})
       }
     })
   } else {
@@ -50,7 +50,9 @@ router.get('/1/vocabulary', function (req, res, next) {
         numList[i] = i
       }
       numList.sort(function (a, b) { return 0.5 - Math.random() })
+      wordOrder = []
       for (i = 0; i < index; i++) {
+        wordOrder[i] = lessonList.vocabulary[i].word
         wordList[i] = lessonList.vocabulary[numList[i]].word
       }
       answerWord = []
@@ -91,6 +93,11 @@ router.post('/1/perlessonScore', function (req, res) {
   }
   Record.findOne({ 'username': username, 'lesson.lessonId': lessonId }, {'lesson.$': 1}, function (err, lessonExist) {
     var testRecord = totalResult / (4 * wordList.length) // 單字得分加總換算成百分比
+    console.log('福俠')
+    console.log('lessonList: ')
+    console.log(lessonList)
+    console.log('wordOrder: ')
+    console.log(wordOrder)
     if (err) {
       throw err
     } else if (!lessonExist) { // 無課程資料存入資料庫
@@ -125,8 +132,8 @@ router.post('/1/perlessonScore', function (req, res) {
               { 'username': username, 'lesson.lessonId': lessonId },
               {$set: {
                 'lesson.$.wordTotalScore': testResultOrder,
-                  'lesson.$.testTimes': 1,
-                  'lesson.$.lessonTotalScore': parseInt(testRecord * 100)
+                'lesson.$.testTimes': 1,
+                'lesson.$.lessonTotalScore': parseInt(testRecord * 100)
               }
               },
               function (err, result) {
