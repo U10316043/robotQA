@@ -59,20 +59,27 @@
 					<span class="badge bg-blue pull-right">成績 <%= hasRecord[i].lessonTotalScore%></span>
 				</a>
 			<% } %>
-			<div class="user-panel w3-blue-gray ">未進行課程記錄</div>
-			<% for (var i = 0; i < noTest.length; i ++) {%>
-				<a href="/allRecord/<%= noTest[i].lessonId%>" class="w3-bar-item w3-button w3-hover-pale-blue w3-hover-text-green">
-					<%= i+1%>. <%= noTest[i].lessonNum%>	
-					<span class="badge bg-red pull-right">未進行測驗</span>
-				</a>
-			<% } %>
-			<div class="user-panel w3-blue-gray ">已刪除的課程記錄</div>
-			<% for (var i = 0; i < noActive.length; i ++) {%>
-				<a href="/allRecord/<%= noActive[i].lessonId%>" class="w3-bar-item w3-button w3-hover-pale-blue w3-hover-text-green">
-					<%= i+1%>. <%= noActive[i].lessonNum%>	
-					<span class="badge bg-navy pull-right">成績 <%= noActive[i].lessonTotalScore%></span>
-				</a>
-			<% } %>
+			<div class="user-panel w3-cyan " data-toggle="collapse" data-target="#noTestRecord">未進行課程記錄 <span class="glyphicon glyphicon-triangle-right"></span></div>
+			<div id="noTestRecord" class="in collapse">
+				<% for (var i = 0; i < noTest.length; i ++) {%>
+					<a href="/allRecord/<%= noTest[i].lessonId%>" class="w3-bar-item w3-button w3-hover-pale-blue w3-hover-text-green">
+						<%= i+1%>. <%= noTest[i].lessonNum%>	
+						<span class="badge bg-red pull-right">未進行測驗</span>
+					</a>
+				<% } %>
+			</div>
+			
+			
+			<div class="user-panel w3-cyan" data-toggle="collapse" data-target="#noActiveRecord">測驗課程已刪除記錄 <span class="glyphicon glyphicon-triangle-right"></span></div>
+			<div id="noActiveRecord" class="in collapse">
+				<% for (var i = 0; i < noActive.length; i ++) {%>
+					<a href="/allRecord/<%= noActive[i].lessonId%>"   class="w3-bar-item w3-button w3-hover-pale-blue w3-hover-text-green">
+						<%= i+1%>. <%= noActive[i].lessonNum%>	
+						<span class="badge bg-navy pull-right">成績 <%= noActive[i].lessonTotalScore%></span>
+					</a>
+				<% } %>
+			</div>
+				
 		</div>
 		<!-- Right body -->
 		<div class="w3-main" style="margin-left:200px">
@@ -81,11 +88,17 @@
 			</div>
 			<br/>
 			<div class="w3-container">
-				
 				<section class="personal setting">
 					<div class="container-fluid">
 						<div class="box box-primary">
 							<h1>個人資料設定</h1>
+						</div>
+						<div class="box-tools">
+							<a href="/guessgame"class=" btn btn-primary btn-lg">
+								<span class="glyphicon glyphicon-grain" aria-hidden="true"></span>
+								英語猜謎題目設定
+								<span class="glyphicon glyphicon-grain" aria-hidden="true"></span>
+							</a>						
 						</div>
 					</div>
 				</section>		

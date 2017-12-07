@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset = "utf-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <link href="https://cdn.bootcss.com/admin-lte/2.4.2/css/AdminLTE.css" rel="stylesheet">
+        <link href="https://cdn.bootcss.com/admin-lte/2.4.2/css/alt/AdminLTE-bootstrap-social.css" rel="stylesheet">
+        <link href="https://cdn.bootcss.com/admin-lte/2.4.2/css/alt/AdminLTE-fullcalendar.css" rel="stylesheet">
+        <link href="https://cdn.bootcss.com/admin-lte/2.4.2/css/alt/AdminLTE-select2.css" rel="stylesheet">
+        <link href="https://cdn.bootcss.com/admin-lte/2.4.2/css/alt/AdminLTE-without-plugins.css" rel="stylesheet">
+        <link href="https://cdn.bootcss.com/admin-lte/2.4.2/css/skins/_all-skins.css" rel="stylesheet">
+        <link href="https://cdn.bootcss.com/admin-lte/2.4.2/css/skins/skin-black-light.css" rel="stylesheet">
+        <link href="https://cdn.bootcss.com/admin-lte/2.4.2/css/skins/skin-black.css" rel="stylesheet">  
+        <title>exam</title>
+    </head>
+    <body class="skin-blue layout-top-nav">     
+        <header class="main-header">
+                <nav class="navbar navbar-static-top">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <% if (loginStatus){ %>
+                            <a class = "navbar-brand" href="/insertLesson"><b><%= user.nickname %>  Home</b></a>
+                            <% } else {%>
+                                    <a class = "navbar-brand" href="/insertLesson"><b> Home</b></a>
+                            <% } %>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                                <span class="glyphicon glyphicon-menu-hamburger"></span>
+                            </button>
+                        </div>
+                        <div class="collapse navbar-collapse" id="navbar-collapse">
+                        <% if (loginStatus){ %>
+                        <ul class="nav navbar-nav navbar-right">
+                                <li><a href="/allRecord" class="btn btn-primary">個人資料</a></li>
+                                <li><a href="/signout" class="btn btn-primary">登出</a></li>
+                        </ul>      
+                        <% } else { %>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a href="/getsignup" class="btn btn-primary">註冊</a></li>
+                                <li><a href="/" class="btn btn-primary">登入</a></li>
+                            </ul>   
+                        <% } %> 
+                        </div>
+                    </div>
+                </nav>
+            </header>    
+        <br/>
+        <section id="lessonIntroduction">
+            <div class="container">
+                <div class="well text-center"><h1>Guess</h1></div>
+            </div>
+        </section>
+        <section id="exam">
+            <div class="container">
+							<h1 class="text-center">施工中</h1>												
+            </div>
+        </section>
+
+    </body>
+</html>

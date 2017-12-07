@@ -17,6 +17,7 @@ var bcrypt = require('bcrypt-nodejs')
 var User = require('./models/user.js')
 var Record = require('./models/record.js')
 var Lesson = require('./models/lesson.js')
+var Guess = require('./models/guess.js')
 // route
 var index = require('./routes/index')
 var vocabularyRoute = require('./routes/vocabulary')
@@ -24,6 +25,7 @@ var lessonRoute = require('./routes/lesson')
 var examRoute = require('./routes/exam')
 var performance = require('./routes/performance')
 var allRecord = require('./routes/allRecord')
+var guessGame = require('./routes/guessGame')
 var app = express()
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
@@ -169,6 +171,7 @@ app.use('/', lessonRoute)
 app.use('/', examRoute)
 app.use('/', performance)
 app.use('/', allRecord)
+app.use('/', guessGame)
 
 // catch 404 and forward to error handler
 // app.use(function(req, res, next) {
